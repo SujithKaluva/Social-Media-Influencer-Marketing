@@ -8,16 +8,16 @@ This database project is designed to help brands manage their influencer marketi
 ## Database Design:
 The database has 10 tables:
 
-Influencers
-Brand
-Skill
-Campaign
-Campaign Performance
-Influencer skill
-Social Media Account
-Social Media Platform
-Campaign post
-Post engagement
+1. Influencers
+2. Brand
+3. Skill
+4. Campaign
+5. Campaign Performance
+6. Influencer skill
+7. Social Media Account
+8. Social Media Platform
+9. Campaign post
+10. Post engagement
 
 
 In addition, there are several views to display data in a meaningful way and help with campaign analysis.
