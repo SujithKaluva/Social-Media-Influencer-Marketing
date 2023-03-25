@@ -49,3 +49,7 @@ The database contains several views to display data in a meaningful way and help
 
 ## Conclusion:
 This database project is designed to help brands manage their influencer marketing campaigns effectively. It allows brands to create campaigns, select relevant influencers, and monitor campaign performance. The database also provides influencers with a platform to display their skills and social media accounts, and track their overall performance across all campaigns. With the help of several views, the database provides insightful analysis to manage campaigns effectively.
+
+## ERD:
+![DMDD (2)](https://user-images.githubusercontent.com/114419639/227743609-cac18f61-b52b-4fda-97fb-8f10d9120733.jpg)
+
