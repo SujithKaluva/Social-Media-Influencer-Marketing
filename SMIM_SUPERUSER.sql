@@ -22,9 +22,9 @@ BEGIN
   IF(CAMPAIGNMANAGERUSER > 0) THEN EXECUTE IMMEDIATE 'DROP USER CAMPAIGNMANAGERUSER CASCADE'; END IF;
   IF(INFLUENCERONE > 0) THEN EXECUTE IMMEDIATE 'DROP USER INFLUENCERONE CASCADE'; END IF;
 
-  IF(APP_ADMIN_ROLE_COUNT > 0) THEN EXECUTE IMMEDIATE 'DROP ROLE APP_ADMIN';
-  IF(CAMPAIGN_MANAGER_ROLE_COUNT > 0) THEN EXECUTE IMMEDIATE 'DROP ROLE CAMPAIGN_MANAGER';
-  IF(INFLUENCER_ROLE_COUNT > 0) THEN EXECUTE IMMEDIATE 'DROP ROLE INFLUENCER';
+  IF(APP_ADMIN_ROLE_COUNT > 0) THEN EXECUTE IMMEDIATE 'DROP ROLE APP_ADMIN'; END IF;
+  IF(CAMPAIGN_MANAGER_ROLE_COUNT > 0) THEN EXECUTE IMMEDIATE 'DROP ROLE CAMPAIGN_MANAGER'; END IF;
+  IF(INFLUENCER_ROLE_COUNT > 0) THEN EXECUTE IMMEDIATE 'DROP ROLE INFLUENCER'; END IF;
   
   EXCEPTION
    WHEN OTHERS THEN
@@ -198,7 +198,8 @@ CREATE TABLE brand (
     brand_location varchar(30) NOT NULL,
     website varchar(30) NOT NULL UNIQUE,
     email varchar(255) NOT NULL UNIQUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT email_check CHECK (REGEXP_LIKE(email, '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'))
 );
 
 CREATE TABLE influencer (
@@ -209,7 +210,8 @@ CREATE TABLE influencer (
     email varchar(255) NOT NULL UNIQUE,
     phone varchar(255) NOT NULL,
     gender varchar(30) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT email_check_two CHECK (REGEXP_LIKE(email, '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'))
 );
 
 CREATE TABLE skill (
@@ -802,3 +804,112 @@ VALUES (campaign_performance_id_seq.nextval, 3, 2, 1250, 17500, 4000, 1, 25000);
 
 
 -- Views --
+
+CREATE OR REPLACE VIEW INFLUENCER_PROFILES AS
+select * from INFLUENCER ;
+
+CREATE OR REPLACE VIEW BRANDS AS
+select * from BRAND ;
+
+CREATE OR REPLACE VIEW influencer_skill_view AS
+SELECT i.influencer_id, i.first_name, i.last_name, i.influencer_location, s.skill_name, s.skill_description
+FROM influencer i
+INNER JOIN influencer_skill isk ON i.influencer_id = isk.influencer_id
+INNER JOIN skill s ON isk.skill_id = s.skill_id;
+
+
+
+CREATE OR REPLACE VIEW campaign_post_view AS
+SELECT 
+    cp.post_id,
+    cp.campaign_id,
+    cp.post_caption,
+    cp.post_image,
+    cp.created_at AS post_date,
+    inf.first_name || ' ' || inf.last_name AS influencer_name,
+    b.brand_name
+FROM 
+    campaign_post cp
+    JOIN social_media_account sma ON sma.social_media_account_id = cp.social_media_account_id
+    JOIN influencer inf ON inf.influencer_id = sma.influncer_id
+    JOIN campaign c ON c.campaign_id = cp.campaign_id
+    JOIN brand b ON b.brand_id = c.brand_id;
+
+
+
+CREATE OR REPLACE VIEW campaign_objective_view AS
+SELECT 
+    c.campaign_id,
+    c.campaign_name,
+    c.campaign_objective,
+    c.target_audience,
+    c.campaign_priority
+FROM 
+    campaign c;
+
+
+
+CREATE OR REPLACE VIEW social_media_account_view AS
+SELECT 
+    sma.social_media_account_id,
+    smp.platform_name,
+    sma.account_handle,
+    sma.followers,
+    sma.bio,
+    sma.account_url
+FROM 
+    social_media_account sma
+    JOIN social_media_platform smp ON sma.platform_id = smp.platform_id;
+
+
+
+CREATE OR REPLACE VIEW influencer_engagement_analysis_view AS
+SELECT 
+    i.influencer_id,
+    i.first_name || ' ' || i.last_name AS influencer_name,
+    smp.platform_name,
+    c.campaign_name,
+    ROUND((pe.likes + pe.shares + pe.comments) / pe.views * 100, 2) AS engagement_rate
+FROM 
+    influencer i
+    JOIN social_media_account sma ON i.influencer_id = sma.influncer_id
+    JOIN social_media_platform smp ON sma.platform_id = smp.platform_id
+    JOIN campaign_post cp ON sma.social_media_account_id = cp.social_media_account_id
+    JOIN post_engagement pe ON cp.post_id = pe.post_id
+    JOIN campaign c ON cp.campaign_id = c.campaign_id;
+    
+
+
+CREATE OR REPLACE VIEW campaign_timeline_view AS
+SELECT c.campaign_id, c.campaign_name, c.campaign_objective, c.target_audience, 
+    c.start_date, c.end_date, c.budget, c.campaign_priority, 
+    COUNT(cp.post_id) AS total_posts 
+FROM campaign c 
+LEFT JOIN campaign_post cp ON c.campaign_id = cp.campaign_id 
+GROUP BY c.campaign_id, c.campaign_name, c.campaign_objective, c.target_audience, 
+    c.start_date, c.end_date, c.budget, c.campaign_priority 
+ORDER BY c.start_date;
+
+
+
+CREATE OR REPLACE VIEW influencer_post_engagement_rate AS
+SELECT cp.post_id, cp.post_caption, cp.post_image, c.campaign_name, i.first_name, i.last_name,
+    se.likes, se.shares, se.comments, se.views, se.reach,
+    ((se.likes + se.shares + se.comments) / se.reach) * 100 as engagement_rate
+FROM campaign_post cp
+INNER JOIN campaign c ON c.campaign_id = cp.campaign_id
+INNER JOIN social_media_account sma ON sma.social_media_account_id = cp.social_media_account_id
+INNER JOIN influencer i ON i.influencer_id = sma.influncer_id
+INNER JOIN post_engagement se ON se.post_id = cp.post_id;
+
+grant select on INFLUENCER_PROFILES TO CAMPAIGN_MANAGER;
+grant select on BRANDS TO CAMPAIGN_MANAGER;
+grant select on influencer_skill_view TO CAMPAIGN_MANAGER;
+grant select on campaign_post_view TO CAMPAIGN_MANAGER;
+grant select on campaign_post_view TO INFLUENCER;
+grant select on campaign_objective_view TO INFLUENCER;
+grant select on campaign_objective_view TO CAMPAIGN_MANAGER;
+grant select on social_media_account_view TO CAMPAIGN_MANAGER;
+grant select on influencer_engagement_analysis_view TO CAMPAIGN_MANAGER;
+grant select on campaign_timeline_view TO CAMPAIGN_MANAGER;
+grant select on influencer_post_engagement_rate TO CAMPAIGN_MANAGER;
