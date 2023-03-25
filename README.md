@@ -37,15 +37,15 @@ The database also allows influencers to:
 ## Views:
 The database contains several views to display data in a meaningful way and help with campaign analysis:
 
-Influencer Profile View
-Brand Profile View
-Influencer Skill View
-Campaign Post View
-Campaign Objective View
-Social Media Account View
-Influencer Engagement Analysis View
-Campaign Timeline View
-Engagement Rate of Each Post of Influencer
+1. Influencer Profile View
+2. Brand Profile View
+3. Influencer Skill View
+4. Campaign Post View
+5. Campaign Objective View
+6. Social Media Account View
+7. Influencer Engagement Analysis View
+8. Campaign Timeline View
+9. Engagement Rate of Each Post of Influencer
 
 ## Conclusion:
 This database project is designed to help brands manage their influencer marketing campaigns effectively. It allows brands to create campaigns, select relevant influencers, and monitor campaign performance. The database also provides influencers with a platform to display their skills and social media accounts, and track their overall performance across all campaigns. With the help of several views, the database provides insightful analysis to manage campaigns effectively.
