@@ -192,7 +192,7 @@ END;
 /
 
 CREATE TABLE brand (
-    brand_id INT PRIMARY KEY,
+    brand_id NUMBER PRIMARY KEY,
     brand_name VARCHAR(30) NOT NULL,
     contact_person varchar(30) NOT NULL,
     brand_location varchar(30) NOT NULL,
@@ -203,7 +203,7 @@ CREATE TABLE brand (
 );
 
 CREATE TABLE influencer (
-    influencer_id INT PRIMARY KEY,
+    influencer_id NUMBER PRIMARY KEY,
     first_name VARCHAR(30) NOT NULL,
     last_name varchar(30) NOT NULL,
     influencer_location varchar(30) NOT NULL,
@@ -215,21 +215,21 @@ CREATE TABLE influencer (
 );
 
 CREATE TABLE skill (
-    skill_id INT PRIMARY KEY,
+    skill_id NUMBER PRIMARY KEY,
     skill_name VARCHAR(30) NOT NULL,
     skill_description varchar(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE influencer_skill (
-    skill_id INT NOT NULL REFERENCES skill,
-    influencer_id INT NOT NULL REFERENCES influencer,
+    skill_id NUMBER NOT NULL REFERENCES skill,
+    influencer_id NUMBER NOT NULL REFERENCES influencer,
     constraint infsk_pk PRIMARY KEY(skill_id, influencer_id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE social_media_platform (
-    platform_id INT PRIMARY KEY,
+    platform_id NUMBER PRIMARY KEY,
     platform_name VARCHAR(30) NOT NULL,
     platform_website varchar(30) NOT NULL UNIQUE,
     platform_description varchar(255) NOT NULL,
@@ -237,12 +237,12 @@ CREATE TABLE social_media_platform (
 );
 
 CREATE TABLE social_media_account (
-    social_media_account_id INT PRIMARY KEY,
-    platform_id INT NOT NULL REFERENCES social_media_platform,
-    influncer_id INT NOT NULL REFERENCES influencer,
+    social_media_account_id NUMBER PRIMARY KEY,
+    platform_id NUMBER NOT NULL REFERENCES social_media_platform,
+    influncer_id NUMBER NOT NULL REFERENCES influencer,
     account_handle VARCHAR(30) NOT NULL,
     account_url VARCHAR(100) NOT NULL UNIQUE,
-    followers INT NOT NULL,
+    followers NUMBER NOT NULL,
     bio varchar(255),
     verified VARCHAR(30) NOT NULL,
     CONSTRAINT unique_account_handle_per_platform UNIQUE (platform_id, account_handle),
@@ -250,49 +250,49 @@ CREATE TABLE social_media_account (
 );
 
 CREATE TABLE campaign (
-    campaign_id INT PRIMARY KEY,
-    brand_id INT NOT NULL REFERENCES brand,
+    campaign_id NUMBER PRIMARY KEY,
+    brand_id NUMBER NOT NULL REFERENCES brand,
     campaign_name VARCHAR(30) NOT NULL,
     campaign_objective varchar(255) NOT NULL,
     target_audience varchar(255) NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     CONSTRAINT date_validation CHECK(TO_CHAR(start_date, 'YYYY-MM-DD') < TO_CHAR(end_date, 'YYYY-MM-DD')),
-    budget INT NOT NULL,
-    campaign_priority INT NOT NULL,
+    budget NUMBER NOT NULL,
+    campaign_priority NUMBER NOT NULL,
     CONSTRAINT campaign_priority_validation CHECK(campaign_priority<4 AND campaign_priority>0),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE campaign_post (
-    post_id INT PRIMARY KEY,
-    campaign_id INT NOT NULL REFERENCES campaign,
-    social_media_account_id INT NOT NULL REFERENCES social_media_account,
+    post_id NUMBER PRIMARY KEY,
+    campaign_id NUMBER NOT NULL REFERENCES campaign,
+    social_media_account_id NUMBER NOT NULL REFERENCES social_media_account,
     post_caption VARCHAR(255) NOT NULL,
     post_image VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE post_engagement (
-    post_id INT NOT NULL REFERENCES campaign_post,
-    likes INT NOT NULL,
-    shares INT NOT NULL,
-    comments INT NOT NULL,
-    views INT NOT NULL,
-    reach INT NOT NULL,
+    post_id NUMBER NOT NULL REFERENCES campaign_post,
+    likes NUMBER NOT NULL,
+    shares NUMBER NOT NULL,
+    comments NUMBER NOT NULL,
+    views NUMBER NOT NULL,
+    reach NUMBER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT unq_eng UNIQUE (post_id)
 );
 
 CREATE TABLE campaign_performance (
-    campaign_performance_id INT PRIMARY KEY,
-    influencer_id INT NOT NULL REFERENCES influencer,
-    campaign_id INT NOT NULL REFERENCES campaign,
-    clicks INT NOT NULL,
-    impressions INT NOT NULL,
-    engagement INT NOT NULL,
-    posts_count INT NOT NULL,
-    reach INT NOT NULL,
+    campaign_performance_id NUMBER PRIMARY KEY,
+    influencer_id NUMBER NOT NULL REFERENCES influencer,
+    campaign_id NUMBER NOT NULL REFERENCES campaign,
+    clicks NUMBER NOT NULL,
+    impressions NUMBER NOT NULL,
+    engagement NUMBER NOT NULL,
+    posts_count NUMBER NOT NULL,
+    reach NUMBER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
