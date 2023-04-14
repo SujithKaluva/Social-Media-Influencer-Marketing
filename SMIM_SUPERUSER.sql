@@ -1188,58 +1188,58 @@ END;
 /
 
 --Campaigns
-BEGIN
--- Campaigns for Apple
-campaign_manager_pkg.insert_campaign( 1, 'iPhone 13 Launch', 'Promote the new iPhone 13 and increase sales', 'Tech enthusiasts and Apple loyalists', TO_DATE('2023-09-15', 'YYYY-MM-DD'), TO_DATE('2023-10-15', 'YYYY-MM-DD'), 1000000, 3);
+-- BEGIN
+-- -- Campaigns for Apple
+-- campaign_manager_pkg.insert_campaign( 1, 'iPhone 13 Launch', 'Promote the new iPhone 13 and increase sales', 'Tech enthusiasts and Apple loyalists', TO_DATE('2023-09-15', 'YYYY-MM-DD'), TO_DATE('2023-10-15', 'YYYY-MM-DD'), 1000000, 3);
 
-campaign_manager_pkg.insert_campaign( 1, 'Holiday Gift Guide', 'Feature Apple products as must-have holiday gifts', 'Holiday shoppers', TO_DATE('2023-11-15', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 500000, 2);
+-- campaign_manager_pkg.insert_campaign( 1, 'Holiday Gift Guide', 'Feature Apple products as must-have holiday gifts', 'Holiday shoppers', TO_DATE('2023-11-15', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 500000, 2);
 
--- Campaigns for Amazon
-campaign_manager_pkg.insert_campaign( 2, 'Prime Day 2023', 'Encourage Amazon Prime subscriptions and boost sales', 'Online shoppers', TO_DATE('2023-07-10', 'YYYY-MM-DD'), TO_DATE('2023-07-11', 'YYYY-MM-DD'), 2000000, 3);
+-- -- Campaigns for Amazon
+-- campaign_manager_pkg.insert_campaign( 2, 'Prime Day 2023', 'Encourage Amazon Prime subscriptions and boost sales', 'Online shoppers', TO_DATE('2023-07-10', 'YYYY-MM-DD'), TO_DATE('2023-07-11', 'YYYY-MM-DD'), 2000000, 3);
 
-campaign_manager_pkg.insert_campaign( 2, 'Back-to-School Sale', 'Promote discounted school supplies and devices', 'Parents and students', TO_DATE('2023-08-01', 'YYYY-MM-DD'), TO_DATE('2023-08-31', 'YYYY-MM-DD'), 1000000, 2);
+-- campaign_manager_pkg.insert_campaign( 2, 'Back-to-School Sale', 'Promote discounted school supplies and devices', 'Parents and students', TO_DATE('2023-08-01', 'YYYY-MM-DD'), TO_DATE('2023-08-31', 'YYYY-MM-DD'), 1000000, 2);
 
--- Campaigns for Microsoft
-campaign_manager_pkg.insert_campaign( 3, 'Windows 11 Launch', 'Promote the new Windows 11 operating system and increase upgrades', 'Businesses and PC users', TO_DATE('2023-10-15', 'YYYY-MM-DD'), TO_DATE('2023-11-30', 'YYYY-MM-DD'), 1500000, 3);
+-- -- Campaigns for Microsoft
+-- campaign_manager_pkg.insert_campaign( 3, 'Windows 11 Launch', 'Promote the new Windows 11 operating system and increase upgrades', 'Businesses and PC users', TO_DATE('2023-10-15', 'YYYY-MM-DD'), TO_DATE('2023-11-30', 'YYYY-MM-DD'), 1500000, 3);
 
-campaign_manager_pkg.insert_campaign( 3, 'Surface Pro Discount', 'Encourage sales of Surface Pro devices with limited-time discounts', 'Tech enthusiasts and professionals', TO_DATE('2023-12-01', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 500000, 2);
+-- campaign_manager_pkg.insert_campaign( 3, 'Surface Pro Discount', 'Encourage sales of Surface Pro devices with limited-time discounts', 'Tech enthusiasts and professionals', TO_DATE('2023-12-01', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 500000, 2);
 
--- Campaigns for Facebook
-campaign_manager_pkg.insert_campaign( 4, 'Holiday Greetings Ad', 'Spread holiday cheer and promote the Facebook platform', 'Facebook users', TO_DATE('2023-12-01', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 100000, 1);
+-- -- Campaigns for Facebook
+-- campaign_manager_pkg.insert_campaign( 4, 'Holiday Greetings Ad', 'Spread holiday cheer and promote the Facebook platform', 'Facebook users', TO_DATE('2023-12-01', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 100000, 1);
 
-campaign_manager_pkg.insert_campaign( 4, 'Facebook Marketplace Ads', 'Promote the Marketplace feature and increase sales', 'Online shoppers', TO_DATE('2023-09-01', 'YYYY-MM-DD'), TO_DATE('2023-10-15', 'YYYY-MM-DD'), 500000, 2);
+-- campaign_manager_pkg.insert_campaign( 4, 'Facebook Marketplace Ads', 'Promote the Marketplace feature and increase sales', 'Online shoppers', TO_DATE('2023-09-01', 'YYYY-MM-DD'), TO_DATE('2023-10-15', 'YYYY-MM-DD'), 500000, 2);
 
--- Campaigns for Alphabet (Google)
-campaign_manager_pkg.insert_campaign( 5, 'Pixel 7 Launch', 'Promote the new Pixel 7 smartphone and increase sales', 'Tech enthusiasts and Android users', TO_DATE('2023-10-01', 'YYYY-MM-DD'), TO_DATE('2023-11-30', 'YYYY-MM-DD'), 2000000, 3);
+-- -- Campaigns for Alphabet (Google)
+-- campaign_manager_pkg.insert_campaign( 5, 'Pixel 7 Launch', 'Promote the new Pixel 7 smartphone and increase sales', 'Tech enthusiasts and Android users', TO_DATE('2023-10-01', 'YYYY-MM-DD'), TO_DATE('2023-11-30', 'YYYY-MM-DD'), 2000000, 3);
 
-campaign_manager_pkg.insert_campaign( 5, 'Google Workspace Upgrade', 'Encourage businesses to upgrade to Google Workspace', 'Small and medium-sized businesses', TO_DATE('2023-07-01', 'YYYY-MM-DD'), TO_DATE('2023-08-31', 'YYYY-MM-DD'), 1000000, 2);
+-- campaign_manager_pkg.insert_campaign( 5, 'Google Workspace Upgrade', 'Encourage businesses to upgrade to Google Workspace', 'Small and medium-sized businesses', TO_DATE('2023-07-01', 'YYYY-MM-DD'), TO_DATE('2023-08-31', 'YYYY-MM-DD'), 1000000, 2);
 
-campaign_manager_pkg.insert_campaign( 5, 'Google Maps Ad Campaign', 'Promote the features and benefits of Google Maps', 'Travelers and drivers', TO_DATE('2023-06-01', 'YYYY-MM-DD'), TO_DATE('2023-06-30', 'YYYY-MM-DD'), 500000, 1);
+-- campaign_manager_pkg.insert_campaign( 5, 'Google Maps Ad Campaign', 'Promote the features and benefits of Google Maps', 'Travelers and drivers', TO_DATE('2023-06-01', 'YYYY-MM-DD'), TO_DATE('2023-06-30', 'YYYY-MM-DD'), 500000, 1);
 
 
-END;
-/
+-- END;
+-- /
 
 
 -- Campaign Posts:
-BEGIN
--- Posts for iPhone 13 Launch campaign
+-- BEGIN
+-- -- Posts for iPhone 13 Launch campaign
 
-social_media_influencer_pkg.insert_campaign_post( 1, 1, 'Introducing the iPhone 13 - the best iPhone yet! With a stunning new design, advanced camera system, and all-day battery life, its the perfect device for tech enthusiasts and Apple loyalists. Get yours today!', 'https://example.com/images/iphone-13-launch.png');
+-- social_media_influencer_pkg.insert_campaign_post( 1, 1, 'Introducing the iPhone 13 - the best iPhone yet! With a stunning new design, advanced camera system, and all-day battery life, its the perfect device for tech enthusiasts and Apple loyalists. Get yours today!', 'https://example.com/images/iphone-13-launch.png');
 
-social_media_influencer_pkg.insert_campaign_post( 1, 1, 'Introducing the new iPhone 13 lineup!', 'https://example.com/iphone13.jpg');
+-- social_media_influencer_pkg.insert_campaign_post( 1, 1, 'Introducing the new iPhone 13 lineup!', 'https://example.com/iphone13.jpg');
 
-social_media_influencer_pkg.insert_campaign_post( 1, 2, 'Experience the power of the iPhone 13 Pro', 'https://example.com/iphone13pro.jpg');
+-- social_media_influencer_pkg.insert_campaign_post( 1, 2, 'Experience the power of the iPhone 13 Pro', 'https://example.com/iphone13pro.jpg');
 
--- Posts for Holiday Gift Guide campaign
+-- -- Posts for Holiday Gift Guide campaign
 
-social_media_influencer_pkg.insert_campaign_post( 2, 1, 'Looking for the perfect holiday gift? Look no further than Apple! From the latest iPhone to the newest MacBook, we have got something for everyone on your list. Shop now and give the gift of innovation!', 'https://example.com/images/holiday-gift-guide.png');
+-- social_media_influencer_pkg.insert_campaign_post( 2, 1, 'Looking for the perfect holiday gift? Look no further than Apple! From the latest iPhone to the newest MacBook, we have got something for everyone on your list. Shop now and give the gift of innovation!', 'https://example.com/images/holiday-gift-guide.png');
 
-social_media_influencer_pkg.insert_campaign_post( 2, 3, 'Surprise your loved ones with the perfect Apple gift this holiday season', 'https://example.com/holidaygifts.jpg');
+-- social_media_influencer_pkg.insert_campaign_post( 2, 3, 'Surprise your loved ones with the perfect Apple gift this holiday season', 'https://example.com/holidaygifts.jpg');
 
-social_media_influencer_pkg.insert_campaign_post( 2, 4, 'The best tech gifts are Apple products!', 'https://example.com/apple-gifts.jpg');
-END;
-/
+-- social_media_influencer_pkg.insert_campaign_post( 2, 4, 'The best tech gifts are Apple products!', 'https://example.com/apple-gifts.jpg');
+-- END;
+-- /
 
 --Post Engagement:
 -- BEGIN
@@ -1264,21 +1264,21 @@ END;
 -- /
 
 -- Campaign Performance:
-BEGIN
--- iPhone 13 Launch campaign, Influencer 1
-campaign_manager_pkg.insert_campaign_performance( 1, 1, campaign_manager_pkg.calculate_clicks(1), campaign_manager_pkg.get_impressions(1), campaign_manager_pkg.calculate_campaign_engagement(1), 2, 150000);
+-- BEGIN
+-- -- iPhone 13 Launch campaign, Influencer 1
+-- campaign_manager_pkg.insert_campaign_performance( 1, 1, campaign_manager_pkg.calculate_clicks(1), campaign_manager_pkg.get_impressions(1), campaign_manager_pkg.calculate_campaign_engagement(1), 2, 150000);
 
--- iPhone 13 Launch campaign, Influencer 2
-campaign_manager_pkg.insert_campaign_performance( 2, 1, campaign_manager_pkg.calculate_clicks(1), campaign_manager_pkg.get_impressions(1), campaign_manager_pkg.calculate_campaign_engagement(1), 1, 50000);
+-- -- iPhone 13 Launch campaign, Influencer 2
+-- campaign_manager_pkg.insert_campaign_performance( 2, 1, campaign_manager_pkg.calculate_clicks(1), campaign_manager_pkg.get_impressions(1), campaign_manager_pkg.calculate_campaign_engagement(1), 1, 50000);
 
--- Holiday Gift Guide campaign, Influencer 1
-campaign_manager_pkg.insert_campaign_performance( 1, 2, campaign_manager_pkg.calculate_clicks(2), campaign_manager_pkg.get_impressions(2), campaign_manager_pkg.calculate_campaign_engagement(2), 1, 15000);
+-- -- Holiday Gift Guide campaign, Influencer 1
+-- campaign_manager_pkg.insert_campaign_performance( 1, 2, campaign_manager_pkg.calculate_clicks(2), campaign_manager_pkg.get_impressions(2), campaign_manager_pkg.calculate_campaign_engagement(2), 1, 15000);
 
--- Holiday Gift Guide campaign, Influencer 3
-campaign_manager_pkg.insert_campaign_performance( 3, 2, campaign_manager_pkg.calculate_clicks(2), campaign_manager_pkg.get_impressions(2), campaign_manager_pkg.calculate_campaign_engagement(2), 1, 25000);
+-- -- Holiday Gift Guide campaign, Influencer 3
+-- campaign_manager_pkg.insert_campaign_performance( 3, 2, campaign_manager_pkg.calculate_clicks(2), campaign_manager_pkg.get_impressions(2), campaign_manager_pkg.calculate_campaign_engagement(2), 1, 25000);
 
-END;
-/
+-- END;
+-- /
 
 
 -- Views --

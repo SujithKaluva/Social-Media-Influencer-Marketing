@@ -140,6 +140,8 @@ GRANT DELETE ON POST_ENGAGEMENT to INFLUENCER;
 
 grant execute on reset_data to INFLUENCER;
 grant execute on reset_seq to INFLUENCER;
+grant execute on reset_data to CAMPAIGN_MANAGER;
+grant execute on reset_seq to CAMPAIGN_MANAGER;
 
 -- Permissions for Views --
 
