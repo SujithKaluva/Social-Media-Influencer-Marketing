@@ -697,6 +697,14 @@ CREATE OR REPLACE PACKAGE social_media_influencer_pkg AS
         p_post_caption IN campaign_post.post_caption%TYPE,
         p_post_image IN campaign_post.post_image%TYPE
     );
+        PROCEDURE insert_post_engagement(
+        p_post_id IN post_engagement.post_id%TYPE,
+        p_likes IN post_engagement.likes%TYPE,
+        p_shares IN post_engagement.shares%TYPE,
+        p_comments IN post_engagement.comments%TYPE,
+        p_views IN NUMBER,
+        p_reach IN post_engagement.reach%TYPE
+    );
 
 
 END social_media_influencer_pkg;
@@ -799,6 +807,19 @@ CREATE OR REPLACE PACKAGE BODY social_media_influencer_pkg AS
             p_post_image
         );
     END insert_campaign_post;
+
+    PROCEDURE insert_post_engagement(
+        p_post_id IN post_engagement.post_id%TYPE,
+        p_likes IN post_engagement.likes%TYPE,
+        p_shares IN post_engagement.shares%TYPE,
+        p_comments IN post_engagement.comments%TYPE,
+        p_views IN NUMBER,
+        p_reach IN post_engagement.reach%TYPE
+    ) IS
+    BEGIN
+        INSERT INTO post_engagement(post_id, likes, shares, comments, views, reach)
+        VALUES (p_post_id, p_likes, p_shares, p_comments, p_views, p_reach);
+    END insert_post_engagement;
 
 
 END social_media_influencer_pkg;
@@ -921,463 +942,264 @@ app_admin_pkg.insert_brand('Marriott International','Anthony Capuano','Bethesda,
 
 END;
 /
--- INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
--- VALUES(brand_id_seq.nextval,'Apple','Tim Cook','Cupertino, California','apple.com','tim@apple.com');
-
--- -- Brand 2
--- INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
--- VALUES(brand_id_seq.nextval,'Amazon','Andy Jassy','Seattle, Washington','amazon.com','ajassy@amazon.com');
-
--- -- Brand 3
--- INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
--- VALUES(brand_id_seq.nextval,'Microsoft','Satya Nadella','Redmond, Washington','microsoft.com','satyan@microsoft.com');
-
--- -- Brand 4
--- INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
--- VALUES(brand_id_seq.nextval,'Facebook','Mark Zuckerberg','Menlo Park, California','facebook.com','zuck@fb.com');
-
--- -- Brand 5
--- INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
--- VALUES(brand_id_seq.nextval,'Alphabet','Sundar Pichai','Mountain View, California','abc.xyz','sundar@google.com');
-
--- Brand 6
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Tesla','Elon Musk','Palo Alto, California','tesla.com','elon@tesla.com');
-
--- Brand 7
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Netflix','Reed Hastings','Los Gatos, California','netflix.com','reed@netflix.com');
-
--- Brand 8
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Walmart','Doug McMillon','Bentonville, Arkansas','walmart.com','doug.mcmillon@walmart.com');
-
--- Brand 9
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Procter and Gamble','David Taylor','Cincinnati, Ohio','pg.com','david.taylor@pg.com');
-
--- Brand 10
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Johnson and Johnson','Alex Gorsky','New Brunswick, New Jersey','jnj.com','agorsky@jnj.com');
-
--- Brand 11
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Nike','John Donahoe','Beaverton, Oregon','nike.com','john.donahoe@nike.com');
-
--- Brand 12
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'PepsiCo','Ramon Laguarta','Purchase, New York','pepsico.com','ramon.laguarta@pepsico.com');
-
--- Brand 13
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Unilever','Alan Jope','London, United Kingdom','unilever.com','alan.jope@unilever.com');
-
--- Brand 14
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Coca-Cola','James Quincey','Atlanta, Georgia','coca-cola.com','jquincey@coca-cola.com');
-
--- Brand 15
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'BMW','Oliver Zipse','Munich, Germany','bmw.com','oliver.zipse@bmw.com');
-
--- Brand 16
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Mercedes-Benz','Ola Källenius','Stuttgart, Germany','mercedes-benz.com','ola.kallenius@daimler.com');
-
--- Brand 17
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Samsung','Kim Ki-nam','Seoul, South Korea','samsung.com','kkn@samsung.com');
-
--- Brand 18
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Toyota','Akio Toyoda','Toyota City, Japan','toyota.com','akio.toyoda@toyota.com');
-
--- Brand 19
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Ford','Jim Farley','Dearborn, Michigan','ford.com','jfarley@ford.com');
-
--- Brand 20
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'McDonalds','Chris Kempczinski','Chicago, Illinois','mcdonalds.com','chris.kempczinski@mcd.com');
-
--- Brand 21
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'General Electric','H. Lawrence Culp Jr.','Boston, Massachusetts','ge.com','larry.culp@ge.com');
-
--- Brand 22
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'IBM','Arvind Krishna','Armonk, New York','ibm.com','arvind.krishna@ibm.com');
-
--- Brand 23
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Bayer','Werner Baumann','Leverkusen, Germany','bayer.com','werner.baumann@bayer.com');
-
--- Brand 24
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Nissan','Makoto Uchida','Yokohama, Japan','nissan-global.com','makoto.uchida@nissan.co.jp');
-
--- Brand 25
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'DHL','John Pearson','Bonn, Germany','dhl.com','john.pearson@dhl.com');
-
--- Brand 26
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'LOréal','Nicolas Hieronimus','Clichy, France','loreal.com','nicolas.hieronimus@loreal.com');
-
--- Brand 27
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Chevron Corporation','Michael Wirth','San Ramon, California','chevron.com','michael.k.wirth@chevron.com');
-
--- Brand 28
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Nestlé','Mark Schneider','Vevey, Switzerland','nestle.com','mark.schneider@nestle.com');
-
--- Brand 29
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Sony','Kenichiro Yoshida','Tokyo, Japan','sony.com','kenichiro.yoshida@sony.com');
-
--- Brand 30
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Intel Corporation','Patrick Gelsinger','Santa Clara, California','intel.com','patrick.gelsinger@intel.com');
-
--- Brand 31
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'LOccitane en Provence','Reinold Geiger','Manosque, France','loccitane.com','reinold.geiger@loccitane.com');
-
--- Brand 32
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Delta Air Lines','Ed Bastian','Atlanta, Georgia','delta.com','ed.bastian@delta.com');
-
--- Brand 33
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Novartis','Vas Narasimhan','Basel, Switzerland','novartis.com','vas.narasimhan@novartis.com');
-
--- Brand 34
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Marriott International','Anthony Capuano','Bethesda, Maryland','marriott.com','anthony.capuano@marriott.com');
-
 
 -- Inserting Influencers
+BEGIN
+social_media_influencer_pkg.insert_influencer( 'John', 'Doe', 'New York', 'john.doe1@gmail.com', '123-456-7890', 'Male');
 
-INSERT INTO influencer(influencer_id, first_name, last_name, influencer_location, email, phone, gender) 
-VALUES(influencer_id_seq.nextval, 'John', 'Doe', 'New York', 'john.doe1@gmail.com', '123-456-7890', 'Male');
+social_media_influencer_pkg.insert_influencer( 'Jane', 'Doe', 'Los Angeles', 'jane.doe2@gmail.com', '234-567-8901', 'Female');
 
-INSERT INTO influencer(influencer_id, first_name, last_name, influencer_location, email, phone, gender) 
-VALUES(influencer_id_seq.nextval, 'Jane', 'Doe', 'Los Angeles', 'jane.doe2@gmail.com', '234-567-8901', 'Female');
+social_media_influencer_pkg.insert_influencer( 'Adam', 'Smith', 'London', 'adam.smith3@gmail.com', '345-678-9012', 'Male');
 
-INSERT INTO influencer(influencer_id, first_name, last_name, influencer_location, email, phone, gender) 
-VALUES(influencer_id_seq.nextval, 'Adam', 'Smith', 'London', 'adam.smith3@gmail.com', '345-678-9012', 'Male');
+social_media_influencer_pkg.insert_influencer( 'Eve', 'Smith', 'Paris', 'eve.smith4@gmail.com', '456-789-0123', 'Female');
 
-INSERT INTO influencer(influencer_id, first_name, last_name, influencer_location, email, phone, gender) 
-VALUES(influencer_id_seq.nextval, 'Eve', 'Smith', 'Paris', 'eve.smith4@gmail.com', '456-789-0123', 'Female');
+social_media_influencer_pkg.insert_influencer( 'Jack', 'Jones', 'Toronto', 'jack.jones5@gmail.com', '567-890-1234', 'Male');
 
-INSERT INTO influencer(influencer_id, first_name, last_name, influencer_location, email, phone, gender) 
-VALUES(influencer_id_seq.nextval, 'Jack', 'Jones', 'Toronto', 'jack.jones5@gmail.com', '567-890-1234', 'Male');
+social_media_influencer_pkg.insert_influencer( 'Jill', 'Jones', 'Sydney', 'jill.jones6@gmail.com', '678-901-2345', 'Female');
 
-INSERT INTO influencer(influencer_id, first_name, last_name, influencer_location, email, phone, gender) 
-VALUES(influencer_id_seq.nextval, 'Jill', 'Jones', 'Sydney', 'jill.jones6@gmail.com', '678-901-2345', 'Female');
+social_media_influencer_pkg.insert_influencer( 'Peter', 'Park', 'Seoul', 'peter.park7@gmail.com', '789-012-3456', 'Male');
 
-INSERT INTO influencer(influencer_id, first_name, last_name, influencer_location, email, phone, gender) 
-VALUES(influencer_id_seq.nextval, 'Peter', 'Park', 'Seoul', 'peter.park7@gmail.com', '789-012-3456', 'Male');
+social_media_influencer_pkg.insert_influencer( 'Mary', 'Park', 'Tokyo', 'mary.park8@gmail.com', '890-123-4567', 'Female');
 
-INSERT INTO influencer(influencer_id, first_name, last_name, influencer_location, email, phone, gender) 
-VALUES(influencer_id_seq.nextval, 'Mary', 'Park', 'Tokyo', 'mary.park8@gmail.com', '890-123-4567', 'Female');
+social_media_influencer_pkg.insert_influencer( 'David', 'Lee', 'Hong Kong', 'david.lee9@gmail.com', '901-234-5678', 'Male');
 
-INSERT INTO influencer(influencer_id, first_name, last_name, influencer_location, email, phone, gender) 
-VALUES(influencer_id_seq.nextval, 'David', 'Lee', 'Hong Kong', 'david.lee9@gmail.com', '901-234-5678', 'Male');
+social_media_influencer_pkg.insert_influencer( 'Anna', 'Lee', 'Singapore', 'anna.lee10@gmail.com', '012-345-6789', 'Female');
 
-INSERT INTO influencer(influencer_id, first_name, last_name, influencer_location, email, phone, gender) 
-VALUES(influencer_id_seq.nextval, 'Anna', 'Lee', 'Singapore', 'anna.lee10@gmail.com', '012-345-6789', 'Female');
+END;
+/
 
 -- Inserting Skills
-
+BEGIN
 -- skills for Apple influencers
-INSERT INTO skill (skill_id, skill_name, skill_description)
-VALUES (skill_id_seq.nextval, 'Tech Reviews', 'Providing reviews of Apple products or discussing tech news');
+app_admin_pkg.insert_skill ( 'Tech Reviews', 'Providing reviews of Apple products or discussing tech news');
 
-INSERT INTO skill (skill_id, skill_name, skill_description)
-VALUES (skill_id_seq.nextval, 'App Development', 'Developing apps for iOS or discussing app development tips and trends');
+app_admin_pkg.insert_skill ( 'App Development', 'Developing apps for iOS or discussing app development tips and trends');
 
-INSERT INTO skill (skill_id, skill_name, skill_description)
-VALUES (skill_id_seq.nextval, 'Apple Accessories', 'Promoting Apple accessories or providing content about Apple accessories');
+app_admin_pkg.insert_skill ( 'Apple Accessories', 'Promoting Apple accessories or providing content about Apple accessories');
 
-INSERT INTO skill (skill_id, skill_name, skill_description)
-VALUES (skill_id_seq.nextval, 'Apple Music', 'Promoting Apple Music or providing content related to music and the music industry');
+app_admin_pkg.insert_skill ( 'Apple Music', 'Promoting Apple Music or providing content related to music and the music industry');
 
-INSERT INTO skill (skill_id, skill_name, skill_description)
-VALUES (skill_id_seq.nextval, 'Apple Events', 'Providing live coverage or highlights of Apple events or discussing Apple event predictions');
+app_admin_pkg.insert_skill ( 'Apple Events', 'Providing live coverage or highlights of Apple events or discussing Apple event predictions');
 
 -- skills for Nike influencers
-INSERT INTO skill (skill_id, skill_name, skill_description)
-VALUES (skill_id_seq.nextval, 'Athletic Training', 'Providing athletic training tips or promoting athletic training products');
+app_admin_pkg.insert_skill ( 'Athletic Training', 'Providing athletic training tips or promoting athletic training products');
 
-INSERT INTO skill (skill_id, skill_name, skill_description)
-VALUES (skill_id_seq.nextval, 'Sports Nutrition', 'Providing nutrition tips or promoting nutrition products for athletes');
+app_admin_pkg.insert_skill ( 'Sports Nutrition', 'Providing nutrition tips or promoting nutrition products for athletes');
 
 -- skills for Adidas influencers
-INSERT INTO skill (skill_id, skill_name, skill_description)
-VALUES (skill_id_seq.nextval, 'Sportswear Design', 'Designing sportswear or promoting sportswear products');
+app_admin_pkg.insert_skill ( 'Sportswear Design', 'Designing sportswear or promoting sportswear products');
 
-INSERT INTO skill (skill_id, skill_name, skill_description)
-VALUES (skill_id_seq.nextval, 'Sneaker Culture', 'Promoting sneaker culture or providing content related to sneakers');
+app_admin_pkg.insert_skill ( 'Sneaker Culture', 'Promoting sneaker culture or providing content related to sneakers');
 
 -- skills for Coca-Cola influencers
-INSERT INTO skill (skill_id, skill_name, skill_description)
-VALUES (skill_id_seq.nextval, 'Beverage Promotion', 'Promoting Coca-Cola beverages or providing beverage-related content');
+app_admin_pkg.insert_skill ( 'Beverage Promotion', 'Promoting Coca-Cola beverages or providing beverage-related content');
 
-INSERT INTO skill (skill_id, skill_name, skill_description)
-VALUES (skill_id_seq.nextval, 'Video Production', 'Creating video content for social media platforms');
-
+app_admin_pkg.insert_skill ( 'Video Production', 'Creating video content for social media platforms');
+END;
+/
+BEGIN
 --Influencer Skills Mapping
 -- Influencer 1
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (1, 1); -- Tech Reviews
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (2, 1); -- App Development
+social_media_influencer_pkg.insert_influencer_skill (1, 1); -- Tech Reviews
+social_media_influencer_pkg.insert_influencer_skill (2, 1); -- App Development
 
 -- Influencer 2
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (3, 2); -- Apple Accessories
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (4, 2); -- Apple Music
+social_media_influencer_pkg.insert_influencer_skill (3, 2); -- Apple Accessories
+social_media_influencer_pkg.insert_influencer_skill (4, 2); -- Apple Music
 
 -- Influencer 3
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (1, 3); -- Tech Reviews
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (5, 3); -- Apple Events
+social_media_influencer_pkg.insert_influencer_skill (1, 3); -- Tech Reviews
+social_media_influencer_pkg.insert_influencer_skill (5, 3); -- Apple Events
 
 -- Influencer 4
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (2, 4); -- App Development
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (3, 4); -- Apple Accessories
+social_media_influencer_pkg.insert_influencer_skill (2, 4); -- App Development
+social_media_influencer_pkg.insert_influencer_skill (3, 4); -- Apple Accessories
 
 -- Influencer 5
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (1, 5); -- Tech Reviews
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (4, 5); -- Apple Music
+social_media_influencer_pkg.insert_influencer_skill (1, 5); -- Tech Reviews
+social_media_influencer_pkg.insert_influencer_skill (4, 5); -- Apple Music
 
 -- Influencer 6
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (2, 6); -- App Development
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (5, 6); -- Apple Events
+social_media_influencer_pkg.insert_influencer_skill (2, 6); -- App Development
+social_media_influencer_pkg.insert_influencer_skill (5, 6); -- Apple Events
 
 -- Influencer 7
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (1, 7); -- Tech Reviews
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (3, 7); -- Apple Accessories
+social_media_influencer_pkg.insert_influencer_skill (1, 7); -- Tech Reviews
+social_media_influencer_pkg.insert_influencer_skill (3, 7); -- Apple Accessories
 
 -- Influencer 8
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (4, 8); -- Apple Music
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (5, 8); -- Apple Events
+social_media_influencer_pkg.insert_influencer_skill (4, 8); -- Apple Music
+social_media_influencer_pkg.insert_influencer_skill (5, 8); -- Apple Events
 
 -- Influencer 9
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (1, 9); -- Tech Reviews
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (2, 9); -- App Development
+social_media_influencer_pkg.insert_influencer_skill (1, 9); -- Tech Reviews
+social_media_influencer_pkg.insert_influencer_skill (2, 9); -- App Development
 
 -- Influencer 10
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (3, 10); -- Apple Accessories
-INSERT INTO influencer_skill (skill_id, influencer_id)
-VALUES (4, 10); -- Apple Music
+social_media_influencer_pkg.insert_influencer_skill (3, 10); -- Apple Accessories
+social_media_influencer_pkg.insert_influencer_skill (4, 10); -- Apple Music
+
+END;
+/
+
 
 --Social Media Platforms -- Insert
+BEGIN
+app_admin_pkg.insert_social_media_platform('Facebook', 'www.facebook.com', 'A social networking website where users can connect with friends and family, and join groups to share common interests.');
 
-INSERT INTO social_media_platform (platform_id, platform_name, platform_website, platform_description)
-VALUES (platform_id_seq.nextval, 'Facebook', 'www.facebook.com', 'A social networking website where users can connect with friends and family, and join groups to share common interests.');
+app_admin_pkg.insert_social_media_platform('Twitter', 'www.twitter.com', 'A microblogging and social networking platform where users can share short messages and follow other users.');
 
-INSERT INTO social_media_platform (platform_id, platform_name, platform_website, platform_description)
-VALUES (platform_id_seq.nextval, 'Twitter', 'www.twitter.com', 'A microblogging and social networking platform where users can share short messages and follow other users.');
+app_admin_pkg.insert_social_media_platform('Instagram', 'www.instagram.com', 'A photo and video sharing social networking platform where users can follow other users and explore content by hashtags and location tags.');
 
-INSERT INTO social_media_platform (platform_id, platform_name, platform_website, platform_description)
-VALUES (platform_id_seq.nextval, 'Instagram', 'www.instagram.com', 'A photo and video sharing social networking platform where users can follow other users and explore content by hashtags and location tags.');
+app_admin_pkg.insert_social_media_platform('LinkedIn', 'www.linkedin.com', 'A social networking platform for professionals to connect, network, and find job opportunities.');
 
-INSERT INTO social_media_platform (platform_id, platform_name, platform_website, platform_description)
-VALUES (platform_id_seq.nextval, 'LinkedIn', 'www.linkedin.com', 'A social networking platform for professionals to connect, network, and find job opportunities.');
+app_admin_pkg.insert_social_media_platform('TikTok', 'www.tiktok.com', 'A social media platform for short-form mobile videos, where users can create and share videos with music, filters, and other effects.');
 
-INSERT INTO social_media_platform (platform_id, platform_name, platform_website, platform_description)
-VALUES (platform_id_seq.nextval, 'TikTok', 'www.tiktok.com', 'A social media platform for short-form mobile videos, where users can create and share videos with music, filters, and other effects.');
+END;
+/
 
 -- Social Media Accounts -- Insert
-
+BEGIN
 -- Facebook
-INSERT INTO social_media_account (social_media_account_id, platform_id, influncer_id, account_handle, account_url, followers, bio, verified)
-VALUES (social_media_account_id_seq.nextval, 1, 1, 'johndoe', 'https://www.facebook.com/johndoe', 10000, 'I am a lifestyle blogger based in New York.', 'Yes');
+social_media_influencer_pkg.insert_social_media_account ( 1, 1, 'johndoe', 'https://www.facebook.com/johndoe', 10000, 'I am a lifestyle blogger based in New York.', 'Yes');
 
 -- Twitter
-INSERT INTO social_media_account (social_media_account_id, platform_id, influncer_id, account_handle, account_url, followers, bio, verified)
-VALUES (social_media_account_id_seq.nextval, 2, 1, '@johndoe', 'https://twitter.com/johndoe', 5000, 'Lifestyle blogger based in New York. Tweets about food, travel, and fashion.', 'No');
+social_media_influencer_pkg.insert_social_media_account ( 2, 1, '@johndoe', 'https://twitter.com/johndoe', 5000, 'Lifestyle blogger based in New York. Tweets about food, travel, and fashion.', 'No');
 
 -- Instagram
-INSERT INTO social_media_account (social_media_account_id, platform_id, influncer_id, account_handle, account_url, followers, bio, verified)
-VALUES (social_media_account_id_seq.nextval, 3, 1, '@johndoe', 'https://www.instagram.com/johndoe', 20000, 'Lifestyle blogger based in New York. Sharing my life with you, one photo at a time.', 'Yes');
+social_media_influencer_pkg.insert_social_media_account ( 3, 1, '@johndoe', 'https://www.instagram.com/johndoe', 20000, 'Lifestyle blogger based in New York. Sharing my life with you, one photo at a time.', 'Yes');
 
 -- LinkedIn
-INSERT INTO social_media_account (social_media_account_id, platform_id, influncer_id, account_handle, account_url, followers, bio, verified)
-VALUES (social_media_account_id_seq.nextval, 4, 1, 'johndoe', 'https://www.linkedin.com/in/johndoe', 1000, 'Experienced blogger and social media influencer with a passion for lifestyle and travel.', 'Yes');
+social_media_influencer_pkg.insert_social_media_account ( 4, 1, 'johndoe', 'https://www.linkedin.com/in/johndoe', 1000, 'Experienced blogger and social media influencer with a passion for lifestyle and travel.', 'Yes');
 
 -- TikTok
-INSERT INTO social_media_account (social_media_account_id, platform_id, influncer_id, account_handle, account_url, followers, bio, verified)
-VALUES (social_media_account_id_seq.nextval, 5, 1, '@johndoe', 'https://www.tiktok.com/@johndoe', 15000, 'Join me on my journey to explore the world, one short video at a time!', 'No');
+social_media_influencer_pkg.insert_social_media_account ( 5, 1, '@johndoe', 'https://www.tiktok.com/@johndoe', 15000, 'Join me on my journey to explore the world, one short video at a time!', 'No');
 
 -- Facebook
-INSERT INTO social_media_account (social_media_account_id, platform_id, influncer_id, account_handle, account_url, followers, bio, verified)
-VALUES (social_media_account_id_seq.nextval, 1, 2, 'jane.doe', 'https://www.facebook.com/jane.doe', 15000, 'I love sharing my life with you all through my blog!', 'No');
+social_media_influencer_pkg.insert_social_media_account ( 1, 2, 'jane.doe', 'https://www.facebook.com/jane.doe', 15000, 'I love sharing my life with you all through my blog!', 'No');
 
 -- Twitter
-INSERT INTO social_media_account (social_media_account_id, platform_id, influncer_id, account_handle, account_url, followers, bio, verified)
-VALUES (social_media_account_id_seq.nextval, 2, 2, '@jane.doe', 'https://twitter.com/jane.doe', 8000, 'Lifestyle blogger based in New York. Tweets about food, travel, and fashion.', 'Yes');
+social_media_influencer_pkg.insert_social_media_account ( 2, 2, '@jane.doe', 'https://twitter.com/jane.doe', 8000, 'Lifestyle blogger based in New York. Tweets about food, travel, and fashion.', 'Yes');
 
 -- Instagram
-INSERT INTO social_media_account (social_media_account_id, platform_id, influncer_id, account_handle, account_url, followers, bio, verified)
-VALUES (social_media_account_id_seq.nextval, 3, 2, '@jane.doe', 'https://www.instagram.com/jane.doe', 25000, 'Lifestyle blogger based in New York. Sharing my life with you, one photo at a time.', 'No');
+social_media_influencer_pkg.insert_social_media_account ( 3, 2, '@jane.doe', 'https://www.instagram.com/jane.doe', 25000, 'Lifestyle blogger based in New York. Sharing my life with you, one photo at a time.', 'No');
 
 -- LinkedIn
-INSERT INTO social_media_account (social_media_account_id, platform_id, influncer_id, account_handle, account_url, followers, bio, verified)
-VALUES (social_media_account_id_seq.nextval, 4, 2, 'jane.doe', 'https://www.linkedin.com/in/jane.doe', 1000, 'Experienced blogger and social media influencer with a passion for lifestyle and travel.', 'Yes');
+social_media_influencer_pkg.insert_social_media_account ( 4, 2, 'jane.doe', 'https://www.linkedin.com/in/jane.doe', 1000, 'Experienced blogger and social media influencer with a passion for lifestyle and travel.', 'Yes');
 
 -- TikTok
-INSERT INTO social_media_account (social_media_account_id, platform_id, influncer_id, account_handle, account_url, followers, bio, verified)
-VALUES (social_media_account_id_seq.nextval, 5, 2, '@jane.doe', 'https://www.tiktok.com/@jane.doe', 15000, 'Join me on my journey to explore the world, one short video at a time!', 'No');
+social_media_influencer_pkg.insert_social_media_account ( 5, 2, '@jane.doe', 'https://www.tiktok.com/@jane.doe', 15000, 'Join me on my journey to explore the world, one short video at a time!', 'No');
 
 -- Facebook
-INSERT INTO social_media_account (social_media_account_id, platform_id, influncer_id, account_handle, account_url, followers, bio, verified)
-VALUES (social_media_account_id_seq.nextval, 1, 3, 'adam.smith', 'https://www.facebook.com/adam.smith', 45000, 'I love sharing my life with you all through my blog!', 'No');
+social_media_influencer_pkg.insert_social_media_account ( 1, 3, 'adam.smith', 'https://www.facebook.com/adam.smith', 45000, 'I love sharing my life with you all through my blog!', 'No');
 
 -- Twitter
-INSERT INTO social_media_account (social_media_account_id, platform_id, influncer_id, account_handle, account_url, followers, bio, verified)
-VALUES (social_media_account_id_seq.nextval, 2, 3, '@adam.smith', 'https://twitter.com/adam.smith', 18000, 'Lifestyle blogger based in New York. Tweets about food, travel, and fashion.', 'Yes');
+social_media_influencer_pkg.insert_social_media_account ( 2, 3, '@adam.smith', 'https://twitter.com/adam.smith', 18000, 'Lifestyle blogger based in New York. Tweets about food, travel, and fashion.', 'Yes');
 
 -- Instagram
-INSERT INTO social_media_account (social_media_account_id, platform_id, influncer_id, account_handle, account_url, followers, bio, verified)
-VALUES (social_media_account_id_seq.nextval, 3, 3, '@adam.smith', 'https://www.instagram.com/adam.smith', 95000, 'Lifestyle blogger based in New York. Sharing my life with you, one photo at a time.', 'No');
+social_media_influencer_pkg.insert_social_media_account ( 3, 3, '@adam.smith', 'https://www.instagram.com/adam.smith', 95000, 'Lifestyle blogger based in New York. Sharing my life with you, one photo at a time.', 'No');
 
 -- LinkedIn
-INSERT INTO social_media_account (social_media_account_id, platform_id, influncer_id, account_handle, account_url, followers, bio, verified)
-VALUES (social_media_account_id_seq.nextval, 4, 3, 'adam.smith', 'https://www.linkedin.com/in/adam.smith', 4000, 'Experienced blogger and social media influencer with a passion for lifestyle and travel.', 'Yes');
+social_media_influencer_pkg.insert_social_media_account ( 4, 3, 'adam.smith', 'https://www.linkedin.com/in/adam.smith', 4000, 'Experienced blogger and social media influencer with a passion for lifestyle and travel.', 'Yes');
 
 -- TikTok
-INSERT INTO social_media_account (social_media_account_id, platform_id, influncer_id, account_handle, account_url, followers, bio, verified)
-VALUES (social_media_account_id_seq.nextval, 5, 3, '@adam.smith', 'https://www.tiktok.com/@adam.smith', 15500, 'Join me on my journey to explore the world, one short video at a time!', 'No');
+social_media_influencer_pkg.insert_social_media_account ( 5, 3, '@adam.smith', 'https://www.tiktok.com/@adam.smith', 15500, 'Join me on my journey to explore the world, one short video at a time!', 'No');
 
+END;
+/
 
 --Campaigns
-
+BEGIN
 -- Campaigns for Apple
-INSERT INTO campaign(campaign_id, brand_id, campaign_name, campaign_objective, target_audience, start_date, end_date, budget, campaign_priority)
-VALUES(campaign_id_seq.nextval, 1, 'iPhone 13 Launch', 'Promote the new iPhone 13 and increase sales', 'Tech enthusiasts and Apple loyalists', TO_DATE('2023-09-15', 'YYYY-MM-DD'), TO_DATE('2023-10-15', 'YYYY-MM-DD'), 1000000, 3);
+campaign_manager_pkg.insert_campaign( 1, 'iPhone 13 Launch', 'Promote the new iPhone 13 and increase sales', 'Tech enthusiasts and Apple loyalists', TO_DATE('2023-09-15', 'YYYY-MM-DD'), TO_DATE('2023-10-15', 'YYYY-MM-DD'), 1000000, 3);
 
-INSERT INTO campaign(campaign_id, brand_id, campaign_name, campaign_objective, target_audience, start_date, end_date, budget, campaign_priority)
-VALUES(campaign_id_seq.nextval, 1, 'Holiday Gift Guide', 'Feature Apple products as must-have holiday gifts', 'Holiday shoppers', TO_DATE('2023-11-15', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 500000, 2);
+campaign_manager_pkg.insert_campaign( 1, 'Holiday Gift Guide', 'Feature Apple products as must-have holiday gifts', 'Holiday shoppers', TO_DATE('2023-11-15', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 500000, 2);
 
 -- Campaigns for Amazon
-INSERT INTO campaign(campaign_id, brand_id, campaign_name, campaign_objective, target_audience, start_date, end_date, budget, campaign_priority)
-VALUES(campaign_id_seq.nextval, 2, 'Prime Day 2023', 'Encourage Amazon Prime subscriptions and boost sales', 'Online shoppers', TO_DATE('2023-07-10', 'YYYY-MM-DD'), TO_DATE('2023-07-11', 'YYYY-MM-DD'), 2000000, 3);
+campaign_manager_pkg.insert_campaign( 2, 'Prime Day 2023', 'Encourage Amazon Prime subscriptions and boost sales', 'Online shoppers', TO_DATE('2023-07-10', 'YYYY-MM-DD'), TO_DATE('2023-07-11', 'YYYY-MM-DD'), 2000000, 3);
 
-INSERT INTO campaign(campaign_id, brand_id, campaign_name, campaign_objective, target_audience, start_date, end_date, budget, campaign_priority)
-VALUES(campaign_id_seq.nextval, 2, 'Back-to-School Sale', 'Promote discounted school supplies and devices', 'Parents and students', TO_DATE('2023-08-01', 'YYYY-MM-DD'), TO_DATE('2023-08-31', 'YYYY-MM-DD'), 1000000, 2);
+campaign_manager_pkg.insert_campaign( 2, 'Back-to-School Sale', 'Promote discounted school supplies and devices', 'Parents and students', TO_DATE('2023-08-01', 'YYYY-MM-DD'), TO_DATE('2023-08-31', 'YYYY-MM-DD'), 1000000, 2);
 
 -- Campaigns for Microsoft
-INSERT INTO campaign(campaign_id, brand_id, campaign_name, campaign_objective, target_audience, start_date, end_date, budget, campaign_priority)
-VALUES(campaign_id_seq.nextval, 3, 'Windows 11 Launch', 'Promote the new Windows 11 operating system and increase upgrades', 'Businesses and PC users', TO_DATE('2023-10-15', 'YYYY-MM-DD'), TO_DATE('2023-11-30', 'YYYY-MM-DD'), 1500000, 3);
+campaign_manager_pkg.insert_campaign( 3, 'Windows 11 Launch', 'Promote the new Windows 11 operating system and increase upgrades', 'Businesses and PC users', TO_DATE('2023-10-15', 'YYYY-MM-DD'), TO_DATE('2023-11-30', 'YYYY-MM-DD'), 1500000, 3);
 
-INSERT INTO campaign(campaign_id, brand_id, campaign_name, campaign_objective, target_audience, start_date, end_date, budget, campaign_priority)
-VALUES(campaign_id_seq.nextval, 3, 'Surface Pro Discount', 'Encourage sales of Surface Pro devices with limited-time discounts', 'Tech enthusiasts and professionals', TO_DATE('2023-12-01', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 500000, 2);
+campaign_manager_pkg.insert_campaign( 3, 'Surface Pro Discount', 'Encourage sales of Surface Pro devices with limited-time discounts', 'Tech enthusiasts and professionals', TO_DATE('2023-12-01', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 500000, 2);
 
 -- Campaigns for Facebook
-INSERT INTO campaign(campaign_id, brand_id, campaign_name, campaign_objective, target_audience, start_date, end_date, budget, campaign_priority)
-VALUES(campaign_id_seq.nextval, 4, 'Holiday Greetings Ad', 'Spread holiday cheer and promote the Facebook platform', 'Facebook users', TO_DATE('2023-12-01', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 100000, 1);
+campaign_manager_pkg.insert_campaign( 4, 'Holiday Greetings Ad', 'Spread holiday cheer and promote the Facebook platform', 'Facebook users', TO_DATE('2023-12-01', 'YYYY-MM-DD'), TO_DATE('2023-12-31', 'YYYY-MM-DD'), 100000, 1);
 
-INSERT INTO campaign(campaign_id, brand_id, campaign_name, campaign_objective, target_audience, start_date, end_date, budget, campaign_priority)
-VALUES(campaign_id_seq.nextval, 4, 'Facebook Marketplace Ads', 'Promote the Marketplace feature and increase sales', 'Online shoppers', TO_DATE('2023-09-01', 'YYYY-MM-DD'), TO_DATE('2023-10-15', 'YYYY-MM-DD'), 500000, 2);
+campaign_manager_pkg.insert_campaign( 4, 'Facebook Marketplace Ads', 'Promote the Marketplace feature and increase sales', 'Online shoppers', TO_DATE('2023-09-01', 'YYYY-MM-DD'), TO_DATE('2023-10-15', 'YYYY-MM-DD'), 500000, 2);
 
 -- Campaigns for Alphabet (Google)
-INSERT INTO campaign(campaign_id, brand_id, campaign_name, campaign_objective, target_audience, start_date, end_date, budget, campaign_priority)
-VALUES(campaign_id_seq.nextval, 5, 'Pixel 7 Launch', 'Promote the new Pixel 7 smartphone and increase sales', 'Tech enthusiasts and Android users', TO_DATE('2023-10-01', 'YYYY-MM-DD'), TO_DATE('2023-11-30', 'YYYY-MM-DD'), 2000000, 3);
+campaign_manager_pkg.insert_campaign( 5, 'Pixel 7 Launch', 'Promote the new Pixel 7 smartphone and increase sales', 'Tech enthusiasts and Android users', TO_DATE('2023-10-01', 'YYYY-MM-DD'), TO_DATE('2023-11-30', 'YYYY-MM-DD'), 2000000, 3);
 
-INSERT INTO campaign(campaign_id, brand_id, campaign_name, campaign_objective, target_audience, start_date, end_date, budget, campaign_priority)
-VALUES(campaign_id_seq.nextval, 5, 'Google Workspace Upgrade', 'Encourage businesses to upgrade to Google Workspace', 'Small and medium-sized businesses', TO_DATE('2023-07-01', 'YYYY-MM-DD'), TO_DATE('2023-08-31', 'YYYY-MM-DD'), 1000000, 2);
+campaign_manager_pkg.insert_campaign( 5, 'Google Workspace Upgrade', 'Encourage businesses to upgrade to Google Workspace', 'Small and medium-sized businesses', TO_DATE('2023-07-01', 'YYYY-MM-DD'), TO_DATE('2023-08-31', 'YYYY-MM-DD'), 1000000, 2);
 
-INSERT INTO campaign(campaign_id, brand_id, campaign_name, campaign_objective, target_audience, start_date, end_date, budget, campaign_priority)
-VALUES(campaign_id_seq.nextval, 5, 'Google Maps Ad Campaign', 'Promote the features and benefits of Google Maps', 'Travelers and drivers', TO_DATE('2023-06-01', 'YYYY-MM-DD'), TO_DATE('2023-06-30', 'YYYY-MM-DD'), 500000, 1);
+campaign_manager_pkg.insert_campaign( 5, 'Google Maps Ad Campaign', 'Promote the features and benefits of Google Maps', 'Travelers and drivers', TO_DATE('2023-06-01', 'YYYY-MM-DD'), TO_DATE('2023-06-30', 'YYYY-MM-DD'), 500000, 1);
+
+
+END;
+/
 
 
 -- Campaign Posts:
-
+BEGIN
 -- Posts for iPhone 13 Launch campaign
 
-INSERT INTO campaign_post (post_id, campaign_id, social_media_account_id, post_caption, post_image)
-VALUES (post_id_seq.nextval, 1, 1, 'Introducing the iPhone 13 - the best iPhone yet! With a stunning new design, advanced camera system, and all-day battery life, its the perfect device for tech enthusiasts and Apple loyalists. Get yours today!', 'https://example.com/images/iphone-13-launch.png');
+social_media_influencer_pkg.insert_campaign_post( 1, 1, 'Introducing the iPhone 13 - the best iPhone yet! With a stunning new design, advanced camera system, and all-day battery life, its the perfect device for tech enthusiasts and Apple loyalists. Get yours today!', 'https://example.com/images/iphone-13-launch.png');
 
-INSERT INTO campaign_post (post_id, campaign_id, social_media_account_id, post_caption, post_image)
-VALUES (post_id_seq.nextval, 1, 1, 'Introducing the new iPhone 13 lineup!', 'https://example.com/iphone13.jpg');
+social_media_influencer_pkg.insert_campaign_post( 1, 1, 'Introducing the new iPhone 13 lineup!', 'https://example.com/iphone13.jpg');
 
-INSERT INTO campaign_post (post_id, campaign_id, social_media_account_id, post_caption, post_image)
-VALUES (post_id_seq.nextval, 1, 2, 'Experience the power of the iPhone 13 Pro', 'https://example.com/iphone13pro.jpg');
+social_media_influencer_pkg.insert_campaign_post( 1, 2, 'Experience the power of the iPhone 13 Pro', 'https://example.com/iphone13pro.jpg');
 
 -- Posts for Holiday Gift Guide campaign
 
-INSERT INTO campaign_post (post_id, campaign_id, social_media_account_id, post_caption, post_image)
-VALUES (post_id_seq.nextval, 2, 1, 'Looking for the perfect holiday gift? Look no further than Apple! From the latest iPhone to the newest MacBook, we have got something for everyone on your list. Shop now and give the gift of innovation!', 'https://example.com/images/holiday-gift-guide.png');
+social_media_influencer_pkg.insert_campaign_post( 2, 1, 'Looking for the perfect holiday gift? Look no further than Apple! From the latest iPhone to the newest MacBook, we have got something for everyone on your list. Shop now and give the gift of innovation!', 'https://example.com/images/holiday-gift-guide.png');
 
-INSERT INTO campaign_post (post_id, campaign_id, social_media_account_id, post_caption, post_image)
-VALUES (post_id_seq.nextval, 2, 3, 'Surprise your loved ones with the perfect Apple gift this holiday season', 'https://example.com/holidaygifts.jpg');
+social_media_influencer_pkg.insert_campaign_post( 2, 3, 'Surprise your loved ones with the perfect Apple gift this holiday season', 'https://example.com/holidaygifts.jpg');
 
-INSERT INTO campaign_post (post_id, campaign_id, social_media_account_id, post_caption, post_image)
-VALUES (post_id_seq.nextval, 2, 4, 'The best tech gifts are Apple products!', 'https://example.com/apple-gifts.jpg');
-
+social_media_influencer_pkg.insert_campaign_post( 2, 4, 'The best tech gifts are Apple products!', 'https://example.com/apple-gifts.jpg');
+END;
+/
 
 --Post Engagement:
-
+BEGIN
 -- Post engagement for Apple iPhone 13 Launch campaign, post 1
-INSERT INTO post_engagement (post_id, likes, shares, comments, views, reach)
-VALUES (1, 10000, 5000, 2000, 50000, 100000);
+social_media_influencer_pkg.insert_post_engagement (1, 10000, 5000, 2000, 50000, 100000);
 
 -- Post engagement for Apple iPhone 13 Launch campaign, post 2
-INSERT INTO post_engagement (post_id, likes, shares, comments, views, reach)
-VALUES (2, 5000, 2500, 1000, 25000, 50000);
+social_media_influencer_pkg.insert_post_engagement (2, 5000, 2500, 1000, 25000, 50000);
 
 -- Post engagement for Apple iPhone 13 Launch campaign, post 1
-INSERT INTO post_engagement(post_id, likes, shares, comments, views, reach)
-VALUES(3, 5000, 2000, 1000, 10000, 15000);
+social_media_influencer_pkg.insert_post_engagement(3, 5000, 2000, 1000, 10000, 15000);
 
 -- Post engagement for Apple iPhone 13 Launch campaign, post 2
-INSERT INTO post_engagement(post_id, likes, shares, comments, views, reach)
-VALUES(4, 10000, 5000, 2500, 20000, 30000);
+social_media_influencer_pkg.insert_post_engagement(4, 10000, 5000, 2500, 20000, 30000);
 
 -- Post engagement for Apple Holiday Gift Guide campaign, post 1
-INSERT INTO post_engagement(post_id, likes, shares, comments, views, reach)
-VALUES(5, 2000, 500, 100, 5000, 7500);
+social_media_influencer_pkg.insert_post_engagement(5, 2000, 500, 100, 5000, 7500);
 
 -- Post engagement for Apple Holiday Gift Guide campaign, post 2
-INSERT INTO post_engagement(post_id, likes, shares, comments, views, reach)
-VALUES(6, 5000, 1500, 500, 10000, 15000);
+social_media_influencer_pkg.insert_post_engagement(6, 5000, 1500, 500, 10000, 15000);
+END;
+/
 
 -- Campaign Performance:
-
+BEGIN
 -- iPhone 13 Launch campaign, Influencer 1
-INSERT INTO campaign_performance (campaign_performance_id, influencer_id, campaign_id, clicks, impressions, engagement, posts_count, reach)
-VALUES (campaign_performance_id_seq.nextval, 1, 1, 1000, 75000, 20000, 2, 150000);
+campaign_manager_pkg.insert_campaign_performance( 1, 1, 1000, 75000, 20000, 2, 150000);
 
 -- iPhone 13 Launch campaign, Influencer 2
-INSERT INTO campaign_performance (campaign_performance_id, influencer_id, campaign_id, clicks, impressions, engagement, posts_count, reach)
-VALUES (campaign_performance_id_seq.nextval, 2, 1, 2500, 35000, 7500, 1, 50000);
+campaign_manager_pkg.insert_campaign_performance( 2, 1, 2500, 35000, 7500, 1, 50000);
 
 -- Holiday Gift Guide campaign, Influencer 1
-INSERT INTO campaign_performance (campaign_performance_id, influencer_id, campaign_id, clicks, impressions, engagement, posts_count, reach)
-VALUES (campaign_performance_id_seq.nextval, 1, 2, 500, 10000, 2500, 1, 15000);
+campaign_manager_pkg.insert_campaign_performance( 1, 2, 500, 10000, 2500, 1, 15000);
 
 -- Holiday Gift Guide campaign, Influencer 3
-INSERT INTO campaign_performance (campaign_performance_id, influencer_id, campaign_id, clicks, impressions, engagement, posts_count, reach)
-VALUES (campaign_performance_id_seq.nextval, 3, 2, 1250, 17500, 4000, 1, 25000);
+campaign_manager_pkg.insert_campaign_performance( 3, 2, 1250, 17500, 4000, 1, 25000);
+
+END;
+/
 
 
 -- Views --
@@ -1466,7 +1288,6 @@ LEFT JOIN campaign_post cp ON c.campaign_id = cp.campaign_id
 GROUP BY c.campaign_id, c.campaign_name, c.campaign_objective, c.target_audience, 
     c.start_date, c.end_date, c.budget, c.campaign_priority 
 ORDER BY c.start_date;
-
 
 
 CREATE OR REPLACE VIEW influencer_post_engagement_rate AS
