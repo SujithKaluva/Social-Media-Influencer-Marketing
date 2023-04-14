@@ -604,6 +604,12 @@ CREATE OR REPLACE PACKAGE campaign_manager_pkg AS
 
      FUNCTION calculate_campaign_engagement(p_campaign_id IN campaign.campaign_id%TYPE)
      RETURN NUMBER;
+    FUNCTION get_impressions(campaign_id_in IN NUMBER)
+    RETURN NUMBER;
+  
+    FUNCTION calculate_clicks(p_campaign_id IN campaign.campaign_id%TYPE)
+    RETURN NUMBER;
+
 
 
 END campaign_manager_pkg;
@@ -662,7 +668,7 @@ CREATE OR REPLACE PACKAGE BODY campaign_manager_pkg AS
         VALUES (campaign_performance_id_seq.NEXTVAL, p_influencer_id, p_campaign_id, p_clicks, p_impressions, p_engagement, p_posts_count, p_reach);
     END insert_campaign_performance;
 
-        FUNCTION calculate_campaign_engagement(p_campaign_id IN campaign.campaign_id%TYPE)
+    FUNCTION calculate_campaign_engagement(p_campaign_id IN campaign.campaign_id%TYPE)
         RETURN NUMBER
     IS
         v_total_engagement NUMBER := 0;
@@ -675,6 +681,43 @@ CREATE OR REPLACE PACKAGE BODY campaign_manager_pkg AS
 
         RETURN v_total_engagement;
     END calculate_campaign_engagement;
+
+ FUNCTION get_impressions(campaign_id_in IN NUMBER)
+RETURN NUMBER
+AS
+  impressions_out NUMBER;
+BEGIN
+  SELECT SUM(reach)
+  INTO impressions_out
+  FROM campaign_post cp
+  JOIN post_engagement pe ON cp.post_id = pe.post_id
+  WHERE cp.campaign_id = campaign_id_in;
+  
+  RETURN impressions_out;
+END;
+
+FUNCTION calculate_clicks(
+    p_campaign_id IN campaign.campaign_id%TYPE
+)
+RETURN NUMBER
+IS
+    v_impressions NUMBER;
+    v_engagement NUMBER;
+    v_clicks NUMBER;
+BEGIN
+    SELECT SUM(reach)
+  INTO v_impressions
+  FROM campaign_post cp
+  JOIN post_engagement pe ON cp.post_id = pe.post_id
+  WHERE cp.campaign_id = p_campaign_id;
+
+
+    v_engagement := campaign_manager_pkg.calculate_campaign_engagement(p_campaign_id);
+
+    v_clicks := v_impressions * v_engagement / 100;
+    RETURN v_clicks;
+END;
+
 
 END campaign_manager_pkg;
 /
@@ -1223,16 +1266,16 @@ END;
 -- Campaign Performance:
 BEGIN
 -- iPhone 13 Launch campaign, Influencer 1
-campaign_manager_pkg.insert_campaign_performance( 1, 1, 1000, 75000, campaign_manager_pkg.calculate_campaign_engagement(1), 2, 150000);
+campaign_manager_pkg.insert_campaign_performance( 1, 1, campaign_manager_pkg.calculate_clicks(1), campaign_manager_pkg.get_impressions(1), campaign_manager_pkg.calculate_campaign_engagement(1), 2, 150000);
 
 -- iPhone 13 Launch campaign, Influencer 2
-campaign_manager_pkg.insert_campaign_performance( 2, 1, 2500, 35000, campaign_manager_pkg.calculate_campaign_engagement(1), 1, 50000);
+campaign_manager_pkg.insert_campaign_performance( 2, 1, campaign_manager_pkg.calculate_clicks(1), campaign_manager_pkg.get_impressions(1), campaign_manager_pkg.calculate_campaign_engagement(1), 1, 50000);
 
 -- Holiday Gift Guide campaign, Influencer 1
-campaign_manager_pkg.insert_campaign_performance( 1, 2, 500, 10000, campaign_manager_pkg.calculate_campaign_engagement(2), 1, 15000);
+campaign_manager_pkg.insert_campaign_performance( 1, 2, campaign_manager_pkg.calculate_clicks(2), campaign_manager_pkg.get_impressions(2), campaign_manager_pkg.calculate_campaign_engagement(2), 1, 15000);
 
 -- Holiday Gift Guide campaign, Influencer 3
-campaign_manager_pkg.insert_campaign_performance( 3, 2, 1250, 17500, campaign_manager_pkg.calculate_campaign_engagement(2), 1, 25000);
+campaign_manager_pkg.insert_campaign_performance( 3, 2, campaign_manager_pkg.calculate_clicks(2), campaign_manager_pkg.get_impressions(2), campaign_manager_pkg.calculate_campaign_engagement(2), 1, 25000);
 
 END;
 /
@@ -1335,6 +1378,8 @@ INNER JOIN campaign c ON c.campaign_id = cp.campaign_id
 INNER JOIN social_media_account sma ON sma.social_media_account_id = cp.social_media_account_id
 INNER JOIN influencer i ON i.influencer_id = sma.influncer_id
 INNER JOIN post_engagement se ON se.post_id = cp.post_id;
+
+
 
 
 
