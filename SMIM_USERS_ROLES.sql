@@ -140,3 +140,11 @@ GRANT select on social_media_account_view TO CAMPAIGN_MANAGER;
 GRANT select on influencer_engagement_analysis_view TO CAMPAIGN_MANAGER;
 GRANT select on campaign_timeline_view TO CAMPAIGN_MANAGER;
 GRANT select on influencer_post_engagement_rate TO CAMPAIGN_MANAGER;
+
+--package access--
+
+GRANT EXECUTE ON social_media_influencer_pkg TO INFLUENCER;
+
+GRANT EXECUTE ON app_admin_pkg TO APP_ADMIN;
+
+GRANT EXECUTE ON campaign_manager_pkg TO CAMPAIGN_MANAGER;
