@@ -841,6 +841,24 @@ BEGIN
 END;
 /
 
+--Triggers--
+
+CREATE OR REPLACE TRIGGER create_post_engagement_trigger
+AFTER INSERT ON campaign_post
+FOR EACH ROW
+BEGIN
+  INSERT INTO post_engagement(post_id, likes, shares, comments, views, reach)
+    VALUES(:new.post_id,
+        ROUND(DBMS_RANDOM.VALUE(1, 100)), 
+       ROUND(DBMS_RANDOM.VALUE(1, 50)), 
+       ROUND(DBMS_RANDOM.VALUE(1, 20)), 
+       ROUND(DBMS_RANDOM.VALUE(100, 1000)), 
+       ROUND(DBMS_RANDOM.VALUE(100, 500)));
+END;
+/
+
+--Triggers--
+
 -- Package --
 
 --Inserting Brands
@@ -1163,26 +1181,26 @@ END;
 /
 
 --Post Engagement:
-BEGIN
--- Post engagement for Apple iPhone 13 Launch campaign, post 1
-social_media_influencer_pkg.insert_post_engagement (1, 10000, 5000, 2000, 50000, 100000);
+-- BEGIN
+-- -- Post engagement for Apple iPhone 13 Launch campaign, post 1
+-- social_media_influencer_pkg.insert_post_engagement (1, 10000, 5000, 2000, 50000, 100000);
 
--- Post engagement for Apple iPhone 13 Launch campaign, post 2
-social_media_influencer_pkg.insert_post_engagement (2, 5000, 2500, 1000, 25000, 50000);
+-- -- Post engagement for Apple iPhone 13 Launch campaign, post 2
+-- social_media_influencer_pkg.insert_post_engagement (2, 5000, 2500, 1000, 25000, 50000);
 
--- Post engagement for Apple iPhone 13 Launch campaign, post 1
-social_media_influencer_pkg.insert_post_engagement(3, 5000, 2000, 1000, 10000, 15000);
+-- -- Post engagement for Apple iPhone 13 Launch campaign, post 1
+-- social_media_influencer_pkg.insert_post_engagement(3, 5000, 2000, 1000, 10000, 15000);
 
--- Post engagement for Apple iPhone 13 Launch campaign, post 2
-social_media_influencer_pkg.insert_post_engagement(4, 10000, 5000, 2500, 20000, 30000);
+-- -- Post engagement for Apple iPhone 13 Launch campaign, post 2
+-- social_media_influencer_pkg.insert_post_engagement(4, 10000, 5000, 2500, 20000, 30000);
 
--- Post engagement for Apple Holiday Gift Guide campaign, post 1
-social_media_influencer_pkg.insert_post_engagement(5, 2000, 500, 100, 5000, 7500);
+-- -- Post engagement for Apple Holiday Gift Guide campaign, post 1
+-- social_media_influencer_pkg.insert_post_engagement(5, 2000, 500, 100, 5000, 7500);
 
--- Post engagement for Apple Holiday Gift Guide campaign, post 2
-social_media_influencer_pkg.insert_post_engagement(6, 5000, 1500, 500, 10000, 15000);
-END;
-/
+-- -- Post engagement for Apple Holiday Gift Guide campaign, post 2
+-- social_media_influencer_pkg.insert_post_engagement(6, 5000, 1500, 500, 10000, 15000);
+-- END;
+-- /
 
 -- Campaign Performance:
 BEGIN
