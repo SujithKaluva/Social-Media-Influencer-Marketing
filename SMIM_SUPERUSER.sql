@@ -918,6 +918,24 @@ BEGIN
 END;
 /
 
+CREATE OR REPLACE TRIGGER TRG_CREATE_CAMPAIGN_PERFORMANCE
+AFTER INSERT ON campaign_post
+FOR EACH ROW
+DECLARE
+    inf_id NUMBER;
+BEGIN
+    SELECT influncer_id INTO inf_id FROM social_media_account WHERE social_media_account_id = :NEW.social_media_account_id;
+    
+    UPDATE campaign_performance SET posts_count = posts_count + 1
+    WHERE influencer_id = inf_id AND campaign_id = :NEW.campaign_id;
+    
+    INSERT INTO campaign_performance (campaign_performance_id,influencer_id, campaign_id, clicks, impressions, engagement, posts_count, reach)
+    SELECT campaign_performance_id_seq.nextval,inf_id, :NEW.campaign_id, 1, 1, 1, 1, 0 FROM dual
+    WHERE NOT EXISTS (SELECT 1 FROM campaign_performance WHERE influencer_id = inf_id AND campaign_id = :NEW.campaign_id);
+    
+END;
+/
+--SELECT campaign_performance_id_seq.nextval,inf_id, :NEW.campaign_id, campaign_manager_pkg.calculate_clicks(inf_id), campaign_manager_pkg.get_impressions(inf_id), campaign_manager_pkg.calculate_campaign_engagement(inf_id), 1, 0 FROM dual
 --Triggers--
 
 -- Package --
