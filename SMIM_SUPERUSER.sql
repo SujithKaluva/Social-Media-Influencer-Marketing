@@ -270,6 +270,341 @@ CREATE SEQUENCE campaign_performance_id_seq
 ORDER;
 
 
+-- Package --
+
+CREATE OR REPLACE PACKAGE social_media_influencer_pkg AS
+    PROCEDURE insert_brand(
+        p_brand_name IN brand.brand_name%TYPE,
+        p_contact_person IN brand.contact_person%TYPE,
+        p_brand_location IN brand.brand_location%TYPE,
+        p_website IN brand.website%TYPE,
+        p_email IN brand.email%TYPE
+    );
+
+     PROCEDURE insert_influencer(
+        p_first_name IN influencer.first_name%TYPE,
+        p_last_name IN influencer.last_name%TYPE,
+        p_influencer_location IN influencer.influencer_location%TYPE,
+        p_email IN influencer.email%TYPE,
+        p_phone IN influencer.phone%TYPE,
+        p_gender IN influencer.gender%TYPE
+    );
+
+    PROCEDURE insert_skill(
+        p_skill_name IN skill.skill_name%TYPE,
+        p_skill_description IN skill.skill_description%TYPE
+    );
+
+    PROCEDURE insert_influencer_skill(
+        p_skill_id IN influencer_skill.skill_id%TYPE,
+        p_influencer_id IN influencer_skill.influencer_id%TYPE
+    );
+    
+    PROCEDURE insert_social_media_platform(
+        p_platform_name IN social_media_platform.platform_name%TYPE,
+        p_platform_website IN social_media_platform.platform_website%TYPE,
+        p_platform_description IN social_media_platform.platform_description%TYPE
+    );
+
+    PROCEDURE insert_social_media_account(
+        p_platform_id IN social_media_account.platform_id%TYPE,
+        p_influencer_id IN social_media_account.influncer_id%TYPE,
+        p_account_handle IN social_media_account.account_handle%TYPE,
+        p_account_url IN social_media_account.account_url%TYPE,
+        p_followers IN social_media_account.followers%TYPE,
+        p_bio IN social_media_account.bio%TYPE,
+        p_verified IN social_media_account.verified%TYPE
+    );
+
+    PROCEDURE insert_campaign(
+        p_brand_id IN campaign.brand_id%TYPE,
+        p_campaign_name IN campaign.campaign_name%TYPE,
+        p_campaign_objective IN campaign.campaign_objective%TYPE,
+        p_target_audience IN campaign.target_audience%TYPE,
+        p_start_date IN campaign.start_date%TYPE,
+        p_end_date IN campaign.end_date%TYPE,
+        p_budget IN campaign.budget%TYPE,
+        p_campaign_priority IN campaign.campaign_priority%TYPE
+    );
+
+    PROCEDURE insert_campaign_post(
+        p_campaign_id IN campaign.campaign_id%TYPE,
+        p_social_media_account_id IN social_media_account.social_media_account_id%TYPE,
+        p_post_caption IN campaign_post.post_caption%TYPE,
+        p_post_image IN campaign_post.post_image%TYPE
+    );
+
+    PROCEDURE insert_post_engagement(
+        p_post_id IN post_engagement.post_id%TYPE,
+        p_likes IN post_engagement.likes%TYPE,
+        p_shares IN post_engagement.shares%TYPE,
+        p_comments IN post_engagement.comments%TYPE,
+        p_views IN post_engagement.views%TYPE,
+        p_reach IN post_engagement.reach%TYPE
+    );
+
+    PROCEDURE insert_campaign_performance (
+        p_influencer_id IN campaign_performance.influencer_id%TYPE,
+        p_campaign_id IN campaign_performance.campaign_id%TYPE,
+        p_clicks IN campaign_performance.clicks%TYPE,
+        p_impressions IN campaign_performance.impressions%TYPE,
+        p_engagement IN campaign_performance.engagement%TYPE,
+        p_posts_count IN campaign_performance.posts_count%TYPE,
+        p_reach IN campaign_performance.reach%TYPE
+    );
+
+    PROCEDURE insert_campaign_performance (
+        p_influencer_id IN campaign_performance.influencer_id%TYPE,
+        p_campaign_id IN campaign_performance.campaign_id%TYPE,
+        p_clicks IN campaign_performance.clicks%TYPE,
+        p_impressions IN campaign_performance.impressions%TYPE,
+        p_engagement IN campaign_performance.engagement%TYPE,
+        p_posts_count IN campaign_performance.posts_count%TYPE,
+        p_reach IN campaign_performance.reach%TYPE
+    );
+
+END social_media_influencer_pkg;
+/
+
+CREATE OR REPLACE PACKAGE BODY social_media_influencer_pkg AS
+    PROCEDURE insert_brand(
+        p_brand_name IN brand.brand_name%TYPE,
+        p_contact_person IN brand.contact_person%TYPE,
+        p_brand_location IN brand.brand_location%TYPE,
+        p_website IN brand.website%TYPE,
+        p_email IN brand.email%TYPE
+    ) AS
+    BEGIN
+        INSERT INTO brand (
+            brand_id,
+            brand_name,
+            contact_person,
+            brand_location,
+            website,
+            email
+        ) VALUES (
+            brand_id_seq.NEXTVAL,
+            p_brand_name,
+            p_contact_person,
+            p_brand_location,
+            p_website,
+            p_email
+        );
+    END insert_brand;
+
+    PROCEDURE insert_influencer(
+        p_first_name IN influencer.first_name%TYPE,
+        p_last_name IN influencer.last_name%TYPE,
+        p_influencer_location IN influencer.influencer_location%TYPE,
+        p_email IN influencer.email%TYPE,
+        p_phone IN influencer.phone%TYPE,
+        p_gender IN influencer.gender%TYPE
+    ) AS
+    BEGIN
+        INSERT INTO influencer (
+            influencer_id,
+            first_name,
+            last_name,
+            influencer_location,
+            email,
+            phone,
+            gender
+        ) VALUES (
+            influencer_id_seq.NEXTVAL,
+            p_first_name,
+            p_last_name,
+            p_influencer_location,
+            p_email,
+            p_phone,
+            p_gender
+        );
+    END insert_influencer;
+
+    PROCEDURE insert_skill(
+        p_skill_name IN skill.skill_name%TYPE,
+        p_skill_description IN skill.skill_description%TYPE
+    ) AS
+    BEGIN
+        INSERT INTO skill (
+            skill_id,
+            skill_name,
+            skill_description
+        ) VALUES (
+            skill_id_seq.NEXTVAL,
+            p_skill_name,
+            p_skill_description
+        );
+    END insert_skill;
+
+    PROCEDURE insert_influencer_skill(
+        p_skill_id IN influencer_skill.skill_id%TYPE,
+        p_influencer_id IN influencer_skill.influencer_id%TYPE
+    ) AS
+    BEGIN
+        INSERT INTO influencer_skill (
+            skill_id,
+            influencer_id
+        ) VALUES (
+            p_skill_id,
+            p_influencer_id
+        );
+    END insert_influencer_skill;
+
+    PROCEDURE insert_social_media_platform(
+        p_platform_name IN social_media_platform.platform_name%TYPE,
+        p_platform_website IN social_media_platform.platform_website%TYPE,
+        p_platform_description IN social_media_platform.platform_description%TYPE
+    ) AS
+    BEGIN
+        INSERT INTO social_media_platform (
+            platform_id,
+            platform_name,
+            platform_website,
+            platform_description
+        ) VALUES (
+            platform_id_seq.NEXTVAL,
+            p_platform_name,
+            p_platform_website,
+            p_platform_description
+        );
+    END insert_social_media_platform;
+
+    PROCEDURE insert_social_media_account(
+        p_platform_id IN social_media_account.platform_id%TYPE,
+        p_influencer_id IN social_media_account.influncer_id%TYPE,
+        p_account_handle IN social_media_account.account_handle%TYPE,
+        p_account_url IN social_media_account.account_url%TYPE,
+        p_followers IN social_media_account.followers%TYPE,
+        p_bio IN social_media_account.bio%TYPE,
+        p_verified IN social_media_account.verified%TYPE
+    ) AS
+    BEGIN
+        INSERT INTO social_media_account (
+            social_media_account_id,
+            platform_id,
+            influncer_id,
+            account_handle,
+            account_url,
+            followers,
+            bio,
+            verified
+        ) VALUES (
+            social_media_account_id_seq.NEXTVAL,
+            p_platform_id,
+            p_influencer_id,
+            p_account_handle,
+            p_account_url,
+            p_followers,
+            p_bio,
+            p_verified
+        );
+    END insert_social_media_account;
+
+    PROCEDURE insert_campaign(
+        p_brand_id IN campaign.brand_id%TYPE,
+        p_campaign_name IN campaign.campaign_name%TYPE,
+        p_campaign_objective IN campaign.campaign_objective%TYPE,
+        p_target_audience IN campaign.target_audience%TYPE,
+        p_start_date IN campaign.start_date%TYPE,
+        p_end_date IN campaign.end_date%TYPE,
+        p_budget IN campaign.budget%TYPE,
+        p_campaign_priority IN campaign.campaign_priority%TYPE
+    )
+    AS
+    BEGIN
+        INSERT INTO campaign(
+        campaign_id,
+        brand_id,
+        campaign_name,
+        campaign_objective,
+        target_audience,
+        start_date,
+        end_date,
+        budget,
+        campaign_priority
+        )
+        VALUES (
+        campaign_id_seq.NEXTVAL,
+        p_brand_id,
+        p_campaign_name,
+        p_campaign_objective,
+        p_target_audience,
+        p_start_date,
+        p_end_date,
+        p_budget,
+        p_campaign_priority
+        );
+    END insert_campaign;
+
+  PROCEDURE insert_campaign_post(
+        p_campaign_id IN campaign.campaign_id%TYPE,
+        p_social_media_account_id IN social_media_account.social_media_account_id%TYPE,
+        p_post_caption IN campaign_post.post_caption%TYPE,
+        p_post_image IN campaign_post.post_image%TYPE
+    )
+    AS
+    BEGIN
+        INSERT INTO campaign_post (
+            post_id,
+            campaign_id,
+            social_media_account_id,
+            post_caption,
+            post_image
+        ) VALUES (
+            post_id_seq.NEXTVAL,
+            p_campaign_id,
+            p_social_media_account_id,
+            p_post_caption,
+            p_post_image
+        );
+    END insert_campaign_post;
+
+    PROCEDURE insert_post_engagement(
+        p_post_id IN post_engagement.post_id%TYPE,
+        p_likes IN post_engagement.likes%TYPE,
+        p_shares IN post_engagement.shares%TYPE,
+        p_comments IN post_engagement.comments%TYPE,
+        p_views IN post_engagement.views%TYPE,
+        p_reach IN post_engagement.reach%TYPE
+    ) IS
+    BEGIN
+        INSERT INTO post_engagement(post_id, likes, shares, comments, views, reach)
+        VALUES (p_post_id, p_likes, p_shares, p_comments, p_views, p_reach);
+    END insert_post_engagement;
+
+    PROCEDURE insert_campaign_performance (
+        p_influencer_id IN campaign_performance.influencer_id%TYPE,
+        p_campaign_id IN campaign_performance.campaign_id%TYPE,
+        p_clicks IN campaign_performance.clicks%TYPE,
+        p_impressions IN campaign_performance.impressions%TYPE,
+        p_engagement IN campaign_performance.engagement%TYPE,
+        p_posts_count IN campaign_performance.posts_count%TYPE,
+        p_reach IN campaign_performance.reach%TYPE
+    ) AS
+    BEGIN
+        INSERT INTO campaign_performance (campaign_performance_id, influencer_id, campaign_id, clicks, impressions, engagement, posts_count, reach)
+        VALUES (campaign_performance_id_seq.NEXTVAL, p_influencer_id, p_campaign_id, p_clicks, p_impressions, p_engagement, p_posts_count, p_reach);
+    END insert_campaign_performance;
+
+END social_media_influencer_pkg;
+/
+
+CREATE OR REPLACE PROCEDURE reset_data(table_name varchar)
+AS
+BEGIN
+  EXECUTE IMMEDIATE 'TRUNCATE TABLE ' || table_name;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE reset_seq(seq_name varchar)
+AS
+BEGIN
+  EXECUTE IMMEDIATE 'alter sequence ' || seq_name || ' restart start with 1';
+END;
+/
+
+-- Package --
+
 --Inserting Brands
 
 -- Brand 1
