@@ -272,7 +272,7 @@ ORDER;
 
 -- Package --
 
-CREATE OR REPLACE PACKAGE social_media_influencer_pkg AS
+CREATE OR REPLACE PACKAGE app_admin_pkg AS
     PROCEDURE insert_brand(
         p_brand_name IN brand.brand_name%TYPE,
         p_contact_person IN brand.contact_person%TYPE,
@@ -339,19 +339,10 @@ CREATE OR REPLACE PACKAGE social_media_influencer_pkg AS
         p_likes IN post_engagement.likes%TYPE,
         p_shares IN post_engagement.shares%TYPE,
         p_comments IN post_engagement.comments%TYPE,
-        p_views IN post_engagement.views%TYPE,
+        p_views IN NUMBER,
         p_reach IN post_engagement.reach%TYPE
     );
 
-    PROCEDURE insert_campaign_performance (
-        p_influencer_id IN campaign_performance.influencer_id%TYPE,
-        p_campaign_id IN campaign_performance.campaign_id%TYPE,
-        p_clicks IN campaign_performance.clicks%TYPE,
-        p_impressions IN campaign_performance.impressions%TYPE,
-        p_engagement IN campaign_performance.engagement%TYPE,
-        p_posts_count IN campaign_performance.posts_count%TYPE,
-        p_reach IN campaign_performance.reach%TYPE
-    );
 
     PROCEDURE insert_campaign_performance (
         p_influencer_id IN campaign_performance.influencer_id%TYPE,
@@ -363,10 +354,10 @@ CREATE OR REPLACE PACKAGE social_media_influencer_pkg AS
         p_reach IN campaign_performance.reach%TYPE
     );
 
-END social_media_influencer_pkg;
+END app_admin_pkg;
 /
 
-CREATE OR REPLACE PACKAGE BODY social_media_influencer_pkg AS
+CREATE OR REPLACE PACKAGE BODY app_admin_pkg AS
     PROCEDURE insert_brand(
         p_brand_name IN brand.brand_name%TYPE,
         p_contact_person IN brand.contact_person%TYPE,
@@ -564,7 +555,7 @@ CREATE OR REPLACE PACKAGE BODY social_media_influencer_pkg AS
         p_likes IN post_engagement.likes%TYPE,
         p_shares IN post_engagement.shares%TYPE,
         p_comments IN post_engagement.comments%TYPE,
-        p_views IN post_engagement.views%TYPE,
+        p_views IN NUMBER,
         p_reach IN post_engagement.reach%TYPE
     ) IS
     BEGIN
@@ -586,8 +577,234 @@ CREATE OR REPLACE PACKAGE BODY social_media_influencer_pkg AS
         VALUES (campaign_performance_id_seq.NEXTVAL, p_influencer_id, p_campaign_id, p_clicks, p_impressions, p_engagement, p_posts_count, p_reach);
     END insert_campaign_performance;
 
+END app_admin_pkg;
+/
+CREATE OR REPLACE PACKAGE campaign_manager_pkg AS
+
+    PROCEDURE insert_campaign(
+        p_brand_id IN campaign.brand_id%TYPE,
+        p_campaign_name IN campaign.campaign_name%TYPE,
+        p_campaign_objective IN campaign.campaign_objective%TYPE,
+        p_target_audience IN campaign.target_audience%TYPE,
+        p_start_date IN campaign.start_date%TYPE,
+        p_end_date IN campaign.end_date%TYPE,
+        p_budget IN campaign.budget%TYPE,
+        p_campaign_priority IN campaign.campaign_priority%TYPE
+    );
+
+    PROCEDURE insert_campaign_performance (
+        p_influencer_id IN campaign_performance.influencer_id%TYPE,
+        p_campaign_id IN campaign_performance.campaign_id%TYPE,
+        p_clicks IN campaign_performance.clicks%TYPE,
+        p_impressions IN campaign_performance.impressions%TYPE,
+        p_engagement IN campaign_performance.engagement%TYPE,
+        p_posts_count IN campaign_performance.posts_count%TYPE,
+        p_reach IN campaign_performance.reach%TYPE
+    );
+
+END campaign_manager_pkg;
+/
+
+CREATE OR REPLACE PACKAGE BODY campaign_manager_pkg AS
+    
+
+    PROCEDURE insert_campaign(
+        p_brand_id IN campaign.brand_id%TYPE,
+        p_campaign_name IN campaign.campaign_name%TYPE,
+        p_campaign_objective IN campaign.campaign_objective%TYPE,
+        p_target_audience IN campaign.target_audience%TYPE,
+        p_start_date IN campaign.start_date%TYPE,
+        p_end_date IN campaign.end_date%TYPE,
+        p_budget IN campaign.budget%TYPE,
+        p_campaign_priority IN campaign.campaign_priority%TYPE
+    )
+    AS
+    BEGIN
+        INSERT INTO campaign(
+        campaign_id,
+        brand_id,
+        campaign_name,
+        campaign_objective,
+        target_audience,
+        start_date,
+        end_date,
+        budget,
+        campaign_priority
+        )
+        VALUES (
+        campaign_id_seq.NEXTVAL,
+        p_brand_id,
+        p_campaign_name,
+        p_campaign_objective,
+        p_target_audience,
+        p_start_date,
+        p_end_date,
+        p_budget,
+        p_campaign_priority
+        );
+    END insert_campaign;
+
+    PROCEDURE insert_campaign_performance (
+        p_influencer_id IN campaign_performance.influencer_id%TYPE,
+        p_campaign_id IN campaign_performance.campaign_id%TYPE,
+        p_clicks IN campaign_performance.clicks%TYPE,
+        p_impressions IN campaign_performance.impressions%TYPE,
+        p_engagement IN campaign_performance.engagement%TYPE,
+        p_posts_count IN campaign_performance.posts_count%TYPE,
+        p_reach IN campaign_performance.reach%TYPE
+    ) AS
+    BEGIN
+        INSERT INTO campaign_performance (campaign_performance_id, influencer_id, campaign_id, clicks, impressions, engagement, posts_count, reach)
+        VALUES (campaign_performance_id_seq.NEXTVAL, p_influencer_id, p_campaign_id, p_clicks, p_impressions, p_engagement, p_posts_count, p_reach);
+    END insert_campaign_performance;
+
+END campaign_manager_pkg;
+/
+
+CREATE OR REPLACE PACKAGE social_media_influencer_pkg AS
+
+
+     PROCEDURE insert_influencer(
+        p_first_name IN influencer.first_name%TYPE,
+        p_last_name IN influencer.last_name%TYPE,
+        p_influencer_location IN influencer.influencer_location%TYPE,
+        p_email IN influencer.email%TYPE,
+        p_phone IN influencer.phone%TYPE,
+        p_gender IN influencer.gender%TYPE
+    );
+
+    PROCEDURE insert_influencer_skill(
+        p_skill_id IN influencer_skill.skill_id%TYPE,
+        p_influencer_id IN influencer_skill.influencer_id%TYPE
+    );
+    
+
+    PROCEDURE insert_social_media_account(
+        p_platform_id IN social_media_account.platform_id%TYPE,
+        p_influencer_id IN social_media_account.influncer_id%TYPE,
+        p_account_handle IN social_media_account.account_handle%TYPE,
+        p_account_url IN social_media_account.account_url%TYPE,
+        p_followers IN social_media_account.followers%TYPE,
+        p_bio IN social_media_account.bio%TYPE,
+        p_verified IN social_media_account.verified%TYPE
+    );
+
+
+
+    PROCEDURE insert_campaign_post(
+        p_campaign_id IN campaign.campaign_id%TYPE,
+        p_social_media_account_id IN social_media_account.social_media_account_id%TYPE,
+        p_post_caption IN campaign_post.post_caption%TYPE,
+        p_post_image IN campaign_post.post_image%TYPE
+    );
+
+
 END social_media_influencer_pkg;
 /
+
+CREATE OR REPLACE PACKAGE BODY social_media_influencer_pkg AS
+
+    PROCEDURE insert_influencer(
+        p_first_name IN influencer.first_name%TYPE,
+        p_last_name IN influencer.last_name%TYPE,
+        p_influencer_location IN influencer.influencer_location%TYPE,
+        p_email IN influencer.email%TYPE,
+        p_phone IN influencer.phone%TYPE,
+        p_gender IN influencer.gender%TYPE
+    ) AS
+    BEGIN
+        INSERT INTO influencer (
+            influencer_id,
+            first_name,
+            last_name,
+            influencer_location,
+            email,
+            phone,
+            gender
+        ) VALUES (
+            influencer_id_seq.NEXTVAL,
+            p_first_name,
+            p_last_name,
+            p_influencer_location,
+            p_email,
+            p_phone,
+            p_gender
+        );
+    END insert_influencer;
+
+    PROCEDURE insert_influencer_skill(
+        p_skill_id IN influencer_skill.skill_id%TYPE,
+        p_influencer_id IN influencer_skill.influencer_id%TYPE
+    ) AS
+    BEGIN
+        INSERT INTO influencer_skill (
+            skill_id,
+            influencer_id
+        ) VALUES (
+            p_skill_id,
+            p_influencer_id
+        );
+    END insert_influencer_skill;
+
+    PROCEDURE insert_social_media_account(
+        p_platform_id IN social_media_account.platform_id%TYPE,
+        p_influencer_id IN social_media_account.influncer_id%TYPE,
+        p_account_handle IN social_media_account.account_handle%TYPE,
+        p_account_url IN social_media_account.account_url%TYPE,
+        p_followers IN social_media_account.followers%TYPE,
+        p_bio IN social_media_account.bio%TYPE,
+        p_verified IN social_media_account.verified%TYPE
+    ) AS
+    BEGIN
+        INSERT INTO social_media_account (
+            social_media_account_id,
+            platform_id,
+            influncer_id,
+            account_handle,
+            account_url,
+            followers,
+            bio,
+            verified
+        ) VALUES (
+            social_media_account_id_seq.NEXTVAL,
+            p_platform_id,
+            p_influencer_id,
+            p_account_handle,
+            p_account_url,
+            p_followers,
+            p_bio,
+            p_verified
+        );
+    END insert_social_media_account;
+
+  PROCEDURE insert_campaign_post(
+        p_campaign_id IN campaign.campaign_id%TYPE,
+        p_social_media_account_id IN social_media_account.social_media_account_id%TYPE,
+        p_post_caption IN campaign_post.post_caption%TYPE,
+        p_post_image IN campaign_post.post_image%TYPE
+    )
+    AS
+    BEGIN
+        INSERT INTO campaign_post (
+            post_id,
+            campaign_id,
+            social_media_account_id,
+            post_caption,
+            post_image
+        ) VALUES (
+            post_id_seq.NEXTVAL,
+            p_campaign_id,
+            p_social_media_account_id,
+            p_post_caption,
+            p_post_image
+        );
+    END insert_campaign_post;
+
+
+END social_media_influencer_pkg;
+/
+
+
 
 CREATE OR REPLACE PROCEDURE reset_data(table_name varchar)
 AS
@@ -608,24 +825,120 @@ END;
 --Inserting Brands
 
 -- Brand 1
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Apple','Tim Cook','Cupertino, California','apple.com','tim@apple.com');
+BEGIN
+  app_admin_pkg.insert_brand('Apple','Tim Cook','Cupertino, California','apple.com','tim@apple.com');
+  app_admin_pkg.insert_brand('Amazon','Andy Jassy','Seattle, Washington','amazon.com','ajassy@amazon.com');
+  app_admin_pkg.insert_brand('Microsoft','Satya Nadella','Redmond, Washington','microsoft.com','satyan@microsoft.com');
+  app_admin_pkg.insert_brand('Facebook','Mark Zuckerberg','Menlo Park, California','facebook.com','zuck@fb.com');
+  app_admin_pkg.insert_brand('Alphabet','Sundar Pichai','Mountain View, California','abc.xyz','sundar@google.com');
+  -- Brand 6
+app_admin_pkg.insert_brand('Tesla','Elon Musk','Palo Alto, California','tesla.com','elon@tesla.com');
 
--- Brand 2
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Amazon','Andy Jassy','Seattle, Washington','amazon.com','ajassy@amazon.com');
+-- Brand 7
+app_admin_pkg.insert_brand('Netflix','Reed Hastings','Los Gatos, California','netflix.com','reed@netflix.com');
 
--- Brand 3
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Microsoft','Satya Nadella','Redmond, Washington','microsoft.com','satyan@microsoft.com');
+-- Brand 8
+app_admin_pkg.insert_brand('Walmart','Doug McMillon','Bentonville, Arkansas','walmart.com','doug.mcmillon@walmart.com');
 
--- Brand 4
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Facebook','Mark Zuckerberg','Menlo Park, California','facebook.com','zuck@fb.com');
+-- Brand 9
+app_admin_pkg.insert_brand('Procter and Gamble','David Taylor','Cincinnati, Ohio','pg.com','david.taylor@pg.com');
 
--- Brand 5
-INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
-VALUES(brand_id_seq.nextval,'Alphabet','Sundar Pichai','Mountain View, California','abc.xyz','sundar@google.com');
+-- Brand 10
+app_admin_pkg.insert_brand('Johnson and Johnson','Alex Gorsky','New Brunswick, New Jersey','jnj.com','agorsky@jnj.com');
+
+-- Brand 11
+app_admin_pkg.insert_brand('Nike','John Donahoe','Beaverton, Oregon','nike.com','john.donahoe@nike.com');
+
+-- Brand 12
+app_admin_pkg.insert_brand('PepsiCo','Ramon Laguarta','Purchase, New York','pepsico.com','ramon.laguarta@pepsico.com');
+
+-- Brand 13
+app_admin_pkg.insert_brand('Unilever','Alan Jope','London, United Kingdom','unilever.com','alan.jope@unilever.com');
+
+-- Brand 14
+app_admin_pkg.insert_brand('Coca-Cola','James Quincey','Atlanta, Georgia','coca-cola.com','jquincey@coca-cola.com');
+
+-- Brand 15
+app_admin_pkg.insert_brand('BMW','Oliver Zipse','Munich, Germany','bmw.com','oliver.zipse@bmw.com');
+
+-- Brand 16
+app_admin_pkg.insert_brand('Mercedes-Benz','Ola Källenius','Stuttgart, Germany','mercedes-benz.com','ola.kallenius@daimler.com');
+
+-- Brand 17
+app_admin_pkg.insert_brand('Samsung','Kim Ki-nam','Seoul, South Korea','samsung.com','kkn@samsung.com');
+
+-- Brand 18
+app_admin_pkg.insert_brand('Toyota','Akio Toyoda','Toyota City, Japan','toyota.com','akio.toyoda@toyota.com');
+
+-- Brand 19
+app_admin_pkg.insert_brand('Ford','Jim Farley','Dearborn, Michigan','ford.com','jfarley@ford.com');
+
+-- Brand 20
+app_admin_pkg.insert_brand('McDonalds','Chris Kempczinski','Chicago, Illinois','mcdonalds.com','chris.kempczinski@mcd.com');
+
+-- Brand 21
+app_admin_pkg.insert_brand('General Electric','H. Lawrence Culp Jr.','Boston, Massachusetts','ge.com','larry.culp@ge.com');
+
+-- Brand 22
+app_admin_pkg.insert_brand('IBM','Arvind Krishna','Armonk, New York','ibm.com','arvind.krishna@ibm.com');
+
+-- Brand 23
+app_admin_pkg.insert_brand('Bayer','Werner Baumann','Leverkusen, Germany','bayer.com','werner.baumann@bayer.com');
+
+-- Brand 24
+app_admin_pkg.insert_brand('Nissan','Makoto Uchida','Yokohama, Japan','nissan-global.com','makoto.uchida@nissan.co.jp');
+
+-- Brand 25
+app_admin_pkg.insert_brand('DHL','John Pearson','Bonn, Germany','dhl.com','john.pearson@dhl.com');
+
+-- Brand 26
+app_admin_pkg.insert_brand('LOréal','Nicolas Hieronimus','Clichy, France','loreal.com','nicolas.hieronimus@loreal.com');
+
+-- Brand 27
+app_admin_pkg.insert_brand('Chevron Corporation','Michael Wirth','San Ramon, California','chevron.com','michael.k.wirth@chevron.com');
+
+-- Brand 28
+app_admin_pkg.insert_brand('Nestlé','Mark Schneider','Vevey, Switzerland','nestle.com','mark.schneider@nestle.com');
+
+-- Brand 29
+app_admin_pkg.insert_brand('Sony','Kenichiro Yoshida','Tokyo, Japan','sony.com','kenichiro.yoshida@sony.com');
+
+-- Brand 30
+app_admin_pkg.insert_brand('Intel Corporation','Patrick Gelsinger','Santa Clara, California','intel.com','patrick.gelsinger@intel.com');
+
+-- Brand 31
+app_admin_pkg.insert_brand('LOccitane en Provence','Reinold Geiger','Manosque, France','loccitane.com','reinold.geiger@loccitane.com');
+
+-- Brand 32
+app_admin_pkg.insert_brand('Delta Air Lines','Ed Bastian','Atlanta, Georgia','delta.com','ed.bastian@delta.com');
+
+-- Brand 33
+app_admin_pkg.insert_brand('Novartis','Vas Narasimhan','Basel, Switzerland','novartis.com','vas.narasimhan@novartis.com');
+
+-- Brand 34
+app_admin_pkg.insert_brand('Marriott International','Anthony Capuano','Bethesda, Maryland','marriott.com','anthony.capuano@marriott.com');
+
+
+END;
+/
+-- INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
+-- VALUES(brand_id_seq.nextval,'Apple','Tim Cook','Cupertino, California','apple.com','tim@apple.com');
+
+-- -- Brand 2
+-- INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
+-- VALUES(brand_id_seq.nextval,'Amazon','Andy Jassy','Seattle, Washington','amazon.com','ajassy@amazon.com');
+
+-- -- Brand 3
+-- INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
+-- VALUES(brand_id_seq.nextval,'Microsoft','Satya Nadella','Redmond, Washington','microsoft.com','satyan@microsoft.com');
+
+-- -- Brand 4
+-- INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
+-- VALUES(brand_id_seq.nextval,'Facebook','Mark Zuckerberg','Menlo Park, California','facebook.com','zuck@fb.com');
+
+-- -- Brand 5
+-- INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
+-- VALUES(brand_id_seq.nextval,'Alphabet','Sundar Pichai','Mountain View, California','abc.xyz','sundar@google.com');
 
 -- Brand 6
 INSERT INTO BRAND(brand_id,brand_name,contact_person,brand_location,website,email) 
