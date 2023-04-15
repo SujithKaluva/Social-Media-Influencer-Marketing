@@ -950,7 +950,7 @@ COMPOUND TRIGGER
         v_engagement := campaign_manager_pkg.calculate_campaign_engagement(g_campaign_id);
 
         -- Get clicks for this campaign
-        v_clicks := campaign_manager_pkg.calculate_clicks(g_campaign_id);
+        v_clicks := ROUND(campaign_manager_pkg.calculate_clicks(g_campaign_id));
 
         -- Update existing campaign_performance row if it exists
         UPDATE campaign_performance SET
