@@ -142,7 +142,8 @@ grant execute on reset_data to INFLUENCER;
 grant execute on reset_seq to INFLUENCER;
 grant execute on reset_data to CAMPAIGN_MANAGER;
 grant execute on reset_seq to CAMPAIGN_MANAGER;
-
+grant execute on reset_data to APP_ADMIN;
+grant execute on reset_seq to APP_ADMIN;
 -- Permissions for Views --
 
 GRANT select on INFLUENCER_PROFILES TO CAMPAIGN_MANAGER;
@@ -154,8 +155,10 @@ GRANT select on social_media_account_view TO CAMPAIGN_MANAGER;
 GRANT select on influencer_engagement_analysis_view TO CAMPAIGN_MANAGER;
 GRANT select on campaign_timeline_view TO CAMPAIGN_MANAGER;
 GRANT select on influencer_post_engagement_rate TO CAMPAIGN_MANAGER;
-
+GRANT select on campaign_performance_report TO CAMPAIGN_MANAGER;
+GRANT select on post_engagement_report TO CAMPAIGN_MANAGER;
 --package access--
+
 
 GRANT EXECUTE ON social_media_influencer_pkg TO INFLUENCER;
 
