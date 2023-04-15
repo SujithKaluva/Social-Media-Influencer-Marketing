@@ -602,8 +602,9 @@ CREATE OR REPLACE PACKAGE campaign_manager_pkg AS
         p_reach IN campaign_performance.reach%TYPE
     );
 
-     FUNCTION calculate_campaign_engagement(p_campaign_id IN campaign.campaign_id%TYPE)
-     RETURN NUMBER;
+    FUNCTION calculate_campaign_engagement(p_campaign_id IN campaign.campaign_id%TYPE)
+    RETURN NUMBER;
+
     FUNCTION get_impressions(campaign_id_in IN NUMBER)
     RETURN NUMBER;
   
@@ -682,41 +683,41 @@ CREATE OR REPLACE PACKAGE BODY campaign_manager_pkg AS
         RETURN v_total_engagement;
     END calculate_campaign_engagement;
 
- FUNCTION get_impressions(campaign_id_in IN NUMBER)
-RETURN NUMBER
-AS
-  impressions_out NUMBER;
-BEGIN
-  SELECT SUM(reach)
-  INTO impressions_out
-  FROM campaign_post cp
-  JOIN post_engagement pe ON cp.post_id = pe.post_id
-  WHERE cp.campaign_id = campaign_id_in;
-  
-  RETURN impressions_out;
-END;
+    FUNCTION get_impressions(campaign_id_in IN NUMBER)
+        RETURN NUMBER
+    AS
+        impressions_out NUMBER;
+    BEGIN
+        SELECT SUM(reach)
+        INTO impressions_out
+        FROM campaign_post cp
+        JOIN post_engagement pe ON cp.post_id = pe.post_id
+        WHERE cp.campaign_id = campaign_id_in;
+        
+        RETURN impressions_out;
+    END;
 
-FUNCTION calculate_clicks(
-    p_campaign_id IN campaign.campaign_id%TYPE
-)
-RETURN NUMBER
-IS
-    v_impressions NUMBER;
-    v_engagement NUMBER;
-    v_clicks NUMBER;
-BEGIN
-    SELECT SUM(reach)
-  INTO v_impressions
-  FROM campaign_post cp
-  JOIN post_engagement pe ON cp.post_id = pe.post_id
-  WHERE cp.campaign_id = p_campaign_id;
+    FUNCTION calculate_clicks(
+        p_campaign_id IN campaign.campaign_id%TYPE
+    )
+    RETURN NUMBER
+    IS
+        v_impressions NUMBER;
+        v_engagement NUMBER;
+        v_clicks NUMBER;
+    BEGIN
+        SELECT SUM(reach)
+        INTO v_impressions
+        FROM campaign_post cp
+        JOIN post_engagement pe ON cp.post_id = pe.post_id
+        WHERE cp.campaign_id = p_campaign_id;
 
 
-    v_engagement := campaign_manager_pkg.calculate_campaign_engagement(p_campaign_id);
+        v_engagement := campaign_manager_pkg.calculate_campaign_engagement(p_campaign_id);
 
-    v_clicks := v_impressions * v_engagement / 100;
-    RETURN v_clicks;
-END;
+        v_clicks := v_impressions * v_engagement / 100;
+        RETURN v_clicks;
+    END;
 
 
 END campaign_manager_pkg;
@@ -923,16 +924,55 @@ AFTER INSERT ON campaign_post
 FOR EACH ROW
 DECLARE
     inf_id NUMBER;
+    impressions NUMBER;
+    engagement NUMBER;
+    clicks NUMBER;
 BEGIN
     SELECT influncer_id INTO inf_id FROM social_media_account WHERE social_media_account_id = :NEW.social_media_account_id;
-    
-    UPDATE campaign_performance SET posts_count = posts_count + 1
+
+    -- Get impressions for this campaign
+    impressions := campaign_manager_pkg.get_impressions(:NEW.campaign_id);
+
+    -- Get engagement for this campaign
+    engagement := campaign_manager_pkg.calculate_campaign_engagement(:NEW.campaign_id);
+
+    -- Get clicks for this campaign
+    clicks := campaign_manager_pkg.calculate_clicks(:NEW.campaign_id);
+
+    -- Update existing campaign_performance row if it exists
+    UPDATE campaign_performance SET
+        posts_count = posts_count + 1,
+        clicks = clicks,
+        impressions = impressions,
+        engagement = engagement
     WHERE influencer_id = inf_id AND campaign_id = :NEW.campaign_id;
-    
-    INSERT INTO campaign_performance (campaign_performance_id,influencer_id, campaign_id, clicks, impressions, engagement, posts_count, reach)
-    SELECT campaign_performance_id_seq.nextval,inf_id, :NEW.campaign_id, 1, 1, 1, 1, 0 FROM dual
-    WHERE NOT EXISTS (SELECT 1 FROM campaign_performance WHERE influencer_id = inf_id AND campaign_id = :NEW.campaign_id);
-    
+
+    -- Insert new campaign_performance row if it doesn't exist
+    INSERT INTO campaign_performance (
+        campaign_performance_id,
+        influencer_id,
+        campaign_id,
+        clicks,
+        impressions,
+        engagement,
+        posts_count,
+        reach
+    )
+    SELECT
+        campaign_performance_id_seq.nextval,
+        inf_id,
+        :NEW.campaign_id,
+        clicks,
+        impressions,
+        engagement,
+        1,
+        ROUND(DBMS_RANDOM.VALUE(100, 1000))
+    FROM dual
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM campaign_performance
+        WHERE influencer_id = inf_id AND campaign_id = :NEW.campaign_id
+    );
 END;
 /
 --SELECT campaign_performance_id_seq.nextval,inf_id, :NEW.campaign_id, campaign_manager_pkg.calculate_clicks(inf_id), campaign_manager_pkg.get_impressions(inf_id), campaign_manager_pkg.calculate_campaign_engagement(inf_id), 1, 0 FROM dual
