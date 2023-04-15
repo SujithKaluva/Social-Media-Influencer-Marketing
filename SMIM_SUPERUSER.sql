@@ -924,27 +924,27 @@ AFTER INSERT ON campaign_post
 FOR EACH ROW
 DECLARE
     inf_id NUMBER;
-    impressions NUMBER;
-    engagement NUMBER;
-    clicks NUMBER;
+    v_impressions NUMBER;
+    v_engagement NUMBER;
+    v_clicks NUMBER;
 BEGIN
     SELECT influncer_id INTO inf_id FROM social_media_account WHERE social_media_account_id = :NEW.social_media_account_id;
 
     -- Get impressions for this campaign
-    impressions := campaign_manager_pkg.get_impressions(:NEW.campaign_id);
+    v_impressions := campaign_manager_pkg.get_impressions(:NEW.campaign_id);
 
     -- Get engagement for this campaign
-    engagement := campaign_manager_pkg.calculate_campaign_engagement(:NEW.campaign_id);
+    v_engagement := campaign_manager_pkg.calculate_campaign_engagement(:NEW.campaign_id);
 
     -- Get clicks for this campaign
-    clicks := campaign_manager_pkg.calculate_clicks(:NEW.campaign_id);
+    v_clicks := campaign_manager_pkg.calculate_clicks(:NEW.campaign_id);
 
     -- Update existing campaign_performance row if it exists
     UPDATE campaign_performance SET
         posts_count = posts_count + 1,
-        clicks = clicks,
-        impressions = impressions,
-        engagement = engagement
+        clicks = v_clicks,
+        impressions = v_impressions,
+        engagement = v_engagement
     WHERE influencer_id = inf_id AND campaign_id = :NEW.campaign_id;
 
     -- Insert new campaign_performance row if it doesn't exist
@@ -962,9 +962,9 @@ BEGIN
         campaign_performance_id_seq.nextval,
         inf_id,
         :NEW.campaign_id,
-        clicks,
-        impressions,
-        engagement,
+        v_clicks,
+        v_impressions,
+        v_engagement,
         1,
         ROUND(DBMS_RANDOM.VALUE(100, 1000))
     FROM dual
