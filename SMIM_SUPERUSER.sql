@@ -920,61 +920,77 @@ END;
 /
 
 CREATE OR REPLACE TRIGGER TRG_CREATE_CAMPAIGN_PERFORMANCE
-AFTER INSERT ON campaign_post
-FOR EACH ROW
-DECLARE
-    inf_id NUMBER;
-    v_impressions NUMBER;
-    v_engagement NUMBER;
-    v_clicks NUMBER;
-BEGIN
-    SELECT influncer_id INTO inf_id FROM social_media_account WHERE social_media_account_id = :NEW.social_media_account_id;
+FOR INSERT ON campaign_post
+COMPOUND TRIGGER
 
-    -- Get impressions for this campaign
-    v_impressions := campaign_manager_pkg.get_impressions(:NEW.campaign_id);
+    -- Define package-level variables to store campaign_id and social_media_account_id
+    g_campaign_id campaign_post.campaign_id%TYPE;
+    g_social_media_account_id campaign_post.social_media_account_id%TYPE;
 
-    -- Get engagement for this campaign
-    v_engagement := campaign_manager_pkg.calculate_campaign_engagement(:NEW.campaign_id);
+    -- BEFORE EACH ROW section to store campaign_id and social_media_account_id
+    BEFORE EACH ROW IS
+    BEGIN
+        g_campaign_id := :NEW.campaign_id;
+        g_social_media_account_id := :NEW.social_media_account_id;
+    END BEFORE EACH ROW;
 
-    -- Get clicks for this campaign
-    v_clicks := campaign_manager_pkg.calculate_clicks(:NEW.campaign_id);
+    -- AFTER STATEMENT section to perform calculations and updates on campaign_performance table
+    AFTER STATEMENT IS
+        inf_id NUMBER;
+        v_impressions NUMBER;
+        v_engagement NUMBER;
+        v_clicks NUMBER;
+    BEGIN
+        SELECT influncer_id INTO inf_id FROM social_media_account WHERE social_media_account_id = g_social_media_account_id;
 
-    -- Update existing campaign_performance row if it exists
-    UPDATE campaign_performance SET
-        posts_count = posts_count + 1,
-        clicks = v_clicks,
-        impressions = v_impressions,
-        engagement = v_engagement
-    WHERE influencer_id = inf_id AND campaign_id = :NEW.campaign_id;
+        -- Get impressions for this campaign
+        v_impressions := campaign_manager_pkg.get_impressions(g_campaign_id);
 
-    -- Insert new campaign_performance row if it doesn't exist
-    INSERT INTO campaign_performance (
-        campaign_performance_id,
-        influencer_id,
-        campaign_id,
-        clicks,
-        impressions,
-        engagement,
-        posts_count,
-        reach
-    )
-    SELECT
-        campaign_performance_id_seq.nextval,
-        inf_id,
-        :NEW.campaign_id,
-        v_clicks,
-        v_impressions,
-        v_engagement,
-        1,
-        ROUND(DBMS_RANDOM.VALUE(100, 1000))
-    FROM dual
-    WHERE NOT EXISTS (
-        SELECT 1
-        FROM campaign_performance
-        WHERE influencer_id = inf_id AND campaign_id = :NEW.campaign_id
-    );
-END;
+        -- Get engagement for this campaign
+        v_engagement := campaign_manager_pkg.calculate_campaign_engagement(g_campaign_id);
+
+        -- Get clicks for this campaign
+        v_clicks := campaign_manager_pkg.calculate_clicks(g_campaign_id);
+
+        -- Update existing campaign_performance row if it exists
+        UPDATE campaign_performance SET
+            posts_count = posts_count + 1,
+            clicks = v_clicks,
+            impressions = v_impressions,
+            engagement = v_engagement
+        WHERE influencer_id = inf_id AND campaign_id = g_campaign_id;
+
+        -- Insert new campaign_performance row if it doesn't exist
+        INSERT INTO campaign_performance (
+            campaign_performance_id,
+            influencer_id,
+            campaign_id,
+            clicks,
+            impressions,
+            engagement,
+            posts_count,
+            reach
+        )
+        SELECT
+            campaign_performance_id_seq.nextval,
+            inf_id,
+            g_campaign_id,
+            v_clicks,
+            v_impressions,
+            v_engagement,
+            1,
+            ROUND(DBMS_RANDOM.VALUE(100, 10000))
+        FROM dual
+        WHERE NOT EXISTS (
+            SELECT 1
+            FROM campaign_performance
+            WHERE influencer_id = inf_id AND campaign_id = g_campaign_id
+        );
+    END AFTER STATEMENT;
+
+END TRG_CREATE_CAMPAIGN_PERFORMANCE;
 /
+
 --SELECT campaign_performance_id_seq.nextval,inf_id, :NEW.campaign_id, campaign_manager_pkg.calculate_clicks(inf_id), campaign_manager_pkg.get_impressions(inf_id), campaign_manager_pkg.calculate_campaign_engagement(inf_id), 1, 0 FROM dual
 --Triggers--
 
